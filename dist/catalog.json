@@ -11,8 +11,8 @@
       "name": "Hello Lua",
       "requires": [],
       "runtime": "lua",
-      "sha256": "3ff1db79db51a938c1c0b9b4a3749db5453076dbb7399c21b929c8f474e902e3",
-      "size": 644,
+      "sha256": "903acb38d28b762eba1652c5a8e7cb1b908c6b89bfd542ca3125f77510223723",
+      "size": 639,
       "tags": [
         "hello",
         "starter"
@@ -30,8 +30,8 @@
       "name": "Hello Python",
       "requires": [],
       "runtime": "python",
-      "sha256": "f772ab0d1291c2afd26c12aad546aa094861c781fed4d97a6ee1bd424094315d",
-      "size": 650,
+      "sha256": "ca79f17ae358f4efc19e70225004aebd855ef253785046fb158f19206f756571",
+      "size": 645,
       "tags": [
         "hello",
         "starter"
@@ -51,8 +51,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "f3022ff3695eaeafa2b1c34b6a43014626026f50cf5f47c5e2b9bf64d1daa222",
-      "size": 1099,
+      "sha256": "747a195aa646786ea800c07cd4261d745aa2dac3d105e3db3afeecc3bbacc036",
+      "size": 1090,
       "tags": [
         "fractal",
         "graphics",
@@ -74,8 +74,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "bda5aba2642f902d2a1f448f003f2809fac99fa2f78230fc84ac20b951f337e4",
-      "size": 1516,
+      "sha256": "43fc83c5448955b418641221ee3b748ceccd8f062add9ba52159cf3d60f9b6f0",
+      "size": 1499,
       "tags": [
         "fractal",
         "graphics",
@@ -98,8 +98,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "7a94f06a8ab198048be0c77380027705129d3a38191b4f5e84e9bde8c37c9474",
-      "size": 2736,
+      "sha256": "1bc64c6596fbc68051c919300d881c75809b2835f98ef0478db1f2c8671ab0ac",
+      "size": 2711,
       "tags": [
         "arcade",
         "game",
@@ -122,8 +122,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "185765ef152d927e9a1c6831b4d72fc94587e4c2026df85d0ee456a81ee132cc",
-      "size": 2669,
+      "sha256": "287fe7ea2cc5ad33c1929408e1734d0a219faaf53e8ae66bd9fc19917f0cf8d3",
+      "size": 2642,
       "tags": [
         "arcade",
         "game",
@@ -145,8 +145,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "7db4d113259d136193e4e7ecabe0b2849ca369c666a455f4d3b5add52073dcb4",
-      "size": 4164,
+      "sha256": "e6aa30fc02cb26da0467608ef42f40f8c17fb0212c71dfb75b6bb5c28acc8f01",
+      "size": 4126,
       "tags": [
         "boxes",
         "e-paper",
@@ -170,8 +170,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "4bd9f1223e3786e19834bde0e916d132673fdb6b77a3c73a36bbbd71c805ec61",
-      "size": 6431,
+      "sha256": "7f7b8d5b4abd638563bbc18e75219978b1441ad07337905fc73bce9fec721c55",
+      "size": 6365,
       "tags": [
         "audio",
         "chromatic",
@@ -194,8 +194,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "ea76dd214520eacc3a22203463bb6c3ee533de5127a094a34f52913f0b18e234",
-      "size": 4899,
+      "sha256": "5986ae138473d45316f83a721943f4eb15cedc29b918c322aa8498e20e3f208f",
+      "size": 4869,
       "tags": [
         "angles",
         "geometry",
@@ -218,7 +218,7 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "942a0695faa53738b3046673d96dc31712b59af877036b428ca7285d58f618db",
+      "sha256": "3619a9ddfd850752390fae4f9f6334d577e5fe6fd89adb0dead941c7a1979105",
       "size": 12531,
       "tags": [
         "atproto",
@@ -242,8 +242,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "8042710723ce3d3f29524064b83d6e08747a097e986e0624725cfeb5f204eddf",
-      "size": 37952,
+      "sha256": "2d7a64958d1e1f3ed36a8fe48c95abf74cf5babaa992c3266dc71094fdef0a5e",
+      "size": 37687,
       "tags": [
         "chat",
         "cyberspace",
@@ -265,7 +265,7 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "384a5a425b396f50b6a4f23adad693effc420e235468993dce14f6796deace3e",
+      "sha256": "f05d6465ec6b05b7f67d9eaed92684dc9bc40c18c698e27d76030c121da65ecd",
       "size": 11368,
       "tags": [
         "books",
@@ -289,8 +289,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "6ce49b323882ffd5237eb50e770e2b7d66b41e82db59d7fbc20fc47f19d09708",
-      "size": 5718,
+      "sha256": "4af4872a2c68445a4dd23920b792059e66684ca91c86be8b98ef6a6039a896d0",
+      "size": 5663,
       "tags": [
         "e-paper",
         "qr",
@@ -313,7 +313,7 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "f4fe910ff3af14d2b3a3ec214b8c89ba619ec80c000c718b298e422b69d09cb7",
+      "sha256": "04cc308b45274614bfb5fb0213d1a15ab260f648d9e915c358417cbc24527105",
       "size": 10536,
       "tags": [
         "atom",
@@ -338,8 +338,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "87ebe4c18f06a874b131d3043ec37b379b6b98da505b6d805518e394c20c428f",
-      "size": 7998,
+      "sha256": "2225fc16a7143d6a955c6c96addf148c795553fce47e7208aac1997274c22c51",
+      "size": 7938,
       "tags": [
         "forecast",
         "open-meteo",
@@ -361,7 +361,7 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "ea125a0067063cbdee2f1517d0a7aabc393b7a99ab83fa064b60712f633136d4",
+      "sha256": "c6ecb217318d360464d7a300d5d9f5a0f77856b9541c1f90a38582cecda20e40",
       "size": 12369,
       "tags": [
         "encyclopedia",
