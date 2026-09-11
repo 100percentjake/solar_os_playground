@@ -6,7 +6,7 @@ import sys
 CONFIG_PATH   = sys.argv[0].rsplit('/', 1)[0] + '/ha.cfg'
 GETCH_MS      = 500
 REFRESH_TICKS = 60   # * 500ms = 30s
-SLEEP_TICKS   = 120  # * 500ms = 60s
+SLEEP_TICKS   = 60   # * 500ms = 30s
 
 BAR_H   = 30
 ROW_H   = 30
@@ -42,6 +42,7 @@ def load_config():
                     continue
                 if line.startswith('[') and ']' in line:
                     label = line[1:line.index(']')]
+                    label = label[0].upper() + label[1:] if label else label
                     if label and len(cfg['sections']) < MAX_SECTIONS:
                         cur = {"label": label, "entities": [],
                                "toggleable": False, "icon": _section_icon(label)}

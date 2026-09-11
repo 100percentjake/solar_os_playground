@@ -266,8 +266,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "852ab3596c11d921dfd769d9fc60ff4bd5cb349877426a20e3e5170e60e7855d",
-      "size": 5440,
+      "sha256": "cb6127925d33e54d4d340560770880f94020ffcbc12b3994ae4921027fa19e3b",
+      "size": 5459,
       "tags": [
         "automation",
         "home-assistant",
