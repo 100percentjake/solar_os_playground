@@ -1,0 +1,13 @@
+{
+  "id": "home-assistant",
+  "name": "Home Assistant",
+  "version": "1.0.0",
+  "runtime": "python",
+  "entry": "ha.py",
+  "category": "utilities",
+  "description": "Control and monitor Home Assistant lights, fans, energy, and temperature sensors from the graphic display.",
+  "author": "LocallyRemote",
+  "min_solaros": "4.8.4",
+  "tags": ["home-assistant", "iot", "smart-home", "lights", "automation"],
+  "requires": ["gfx", "wifi"]
+}

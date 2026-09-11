@@ -253,6 +253,31 @@
       "version": "1.1.0"
     },
     {
+      "archive": "packages/home-assistant/1.0.0/home-assistant-1.0.0.sopkg",
+      "author": "LocallyRemote",
+      "category": "utilities",
+      "description": "Control and monitor Home Assistant lights, fans, energy, and temperature sensors from the graphic display.",
+      "entry": "ha.py",
+      "id": "home-assistant",
+      "min_solaros": "4.8.4",
+      "name": "Home Assistant",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "cb6127925d33e54d4d340560770880f94020ffcbc12b3994ae4921027fa19e3b",
+      "size": 5459,
+      "tags": [
+        "automation",
+        "home-assistant",
+        "iot",
+        "lights",
+        "smart-home"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/opds/1.0.1/opds-1.0.1.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
