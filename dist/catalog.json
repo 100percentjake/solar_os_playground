@@ -253,6 +253,32 @@
       "version": "1.1.0"
     },
     {
+      "archive": "packages/ant-bms/1.0.0/ant-bms-1.0.0.sopkg",
+      "author": "Jake",
+      "category": "utilities",
+      "description": "Live monitor for up to two ANT Bluetooth BMS battery packs, with pack, cell, temperature, and energy dashboards.",
+      "entry": "ant_bms.py",
+      "id": "ant-bms",
+      "min_solaros": "4.11.0",
+      "name": "ANT BMS",
+      "requires": [
+        "ble",
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "d44b94cd48193bc294cb4a60d879e1cf0cac5df35feed11300671aa9a1b16789",
+      "size": 7666,
+      "tags": [
+        "ant",
+        "battery",
+        "ble",
+        "bms",
+        "monitor",
+        "power"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/home-assistant/1.0.0/home-assistant-1.0.0.sopkg",
       "author": "LocallyRemote",
       "category": "utilities",
