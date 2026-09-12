@@ -79,8 +79,8 @@ def u32(data, offset):
 
 
 def i32(data, offset):
-    # A signed high word shifted by 16 remains within the signed 32-bit range.
-    return u16(data, offset) + (i16(data, offset + 2) << 16)
+    # Keep signed 32-bit telemetry out of MicroPython's small-int-only path.
+    return float(u16(data, offset)) + float(i16(data, offset + 2)) * 65536.0
 
 
 def uuid_has(uuid, short_uuid):
