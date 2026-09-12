@@ -73,12 +73,15 @@ def i16(data, offset):
 
 
 def u32(data, offset):
-    return u16(data, offset) | (u16(data, offset + 2) << 16)
+    # SolarOS MicroPython is built without arbitrary-size integer support.
+    # Keep an unsigned 32-bit field in float form so an upper word >= 0x8000
+    # never attempts to create a Python long.
+    return float(u16(data, offset)) + float(u16(data, offset + 2)) * 65536.0
 
 
 def i32(data, offset):
-    value = u32(data, offset)
-    return value - 4294967296 if value >= 2147483648 else value
+    # A signed high word shifted by 16 remains within the signed 32-bit range.
+    return u16(data, offset) + (i16(data, offset + 2) << 16)
 
 
 def uuid_has(uuid, short_uuid):
