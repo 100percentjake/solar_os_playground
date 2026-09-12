@@ -5,7 +5,6 @@ Use Left/Right to change pages; touch targets also support swipe navigation.
 """
 
 import json
-import os
 
 import solaros
 from solaros import gfx
@@ -147,7 +146,7 @@ def load_config(modules):
 def save_config(modules):
     try:
         try:
-            os.mkdir("/.solar")
+            solaros.storage.mkdir("/.solar")
         except OSError:
             pass
         entries = []
