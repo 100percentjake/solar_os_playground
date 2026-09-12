@@ -495,22 +495,35 @@ def device_label(device):
     return (device.get("name") or "unnamed") + "  " + device["address"]
 
 
+def clipped_text(value, width):
+    """Fit a small-font label inside a row without relying on pixel metrics."""
+    limit = max(8, (width - 16) // 6)
+    if len(value) <= limit:
+        return value
+    return value[:max(1, limit - 3)] + "..."
+
+
 def draw_setup(width, height, devices, selected, modules, message):
     draw_header(width, PAGE_SETUP, message, aggregate(modules)["soc"])
-    text(8, 61, "Enter assigns next BMS   R scans   C connects   X clears", gfx.FONT_SMALL, gfx.DARK)
+    # Keep the action legend inside a 320-pixel T-Deck display.  Separate
+    # rows remain legible on narrow panels and need no text measurement API.
+    text(8, 59, "Enter select    R scan", gfx.FONT_SMALL, gfx.DARK)
+    text(8, 74, "C connect       X clear", gfx.FONT_SMALL, gfx.DARK)
     for index, module in enumerate(modules):
         detail = module["name"] or module["address"] or "not selected"
-        text(8, 82 + index * 18, "%s: %s" % (module["label"], detail), gfx.FONT_SMALL, gfx.BLACK)
-    top = 124
+        text(8, 92 + index * 17, "%s: %s" % (module["label"], detail), gfx.FONT_SMALL, gfx.BLACK)
+    top = 130
     visible = max(1, (height - top - 8) // 18)
     first = max(0, selected - visible + 1)
     for row, device in enumerate(devices[first:first + visible]):
         index = first + row
-        color = gfx.rgb(20, 80, 150) if index == selected else gfx.DARK
         if index == selected:
-            gfx.color(gfx.rgb(210, 230, 255))
+            # Named colors track the user's setterm foreground/background
+            # palette; literal RGB selection colors do not.
+            gfx.color(gfx.DARK)
             gfx.fill_rect(4, top + row * 18 - 13, width - 8, 17)
-        text(8, top + row * 18, device_label(device)[:42], gfx.FONT_SMALL, color)
+        color = gfx.WHITE if index == selected else gfx.DARK
+        text(8, top + row * 18, clipped_text(device_label(device), width), gfx.FONT_SMALL, color)
 
 
 def draw(page, modules, devices, selected, message, layout, touch_enabled):
@@ -597,6 +610,7 @@ def main():
             current_time = now_ms()
             poll_modules(modules, current_time)
             key = gfx.getch(80)
+            changed = False
             width, height = gfx.size()
             touch_events = []
             while len(touch_events) < 16:
@@ -610,8 +624,10 @@ def main():
                 break
             if key == gfx.KEY_LEFT:
                 page = (page - 1) % PAGE_COUNT
+                changed = True
             elif key == gfx.KEY_RIGHT:
                 page = (page + 1) % PAGE_COUNT
+                changed = True
             elif page == PAGE_SETUP:
                 if key in (ord("r"), ord("R")):
                     message = "Scanning for BLE devices..."
@@ -619,6 +635,7 @@ def main():
                     devices = scan_devices()
                     selected = min(selected, max(0, len(devices) - 1))
                     message = "%d devices found" % len(devices)
+                    changed = True
                 elif key in (ord("x"), ord("X")):
                     for module in modules:
                         disconnect_module(module)
@@ -628,11 +645,13 @@ def main():
                         module["last_error"] = "not configured"
                     save_config(modules)
                     message = "BMS selection cleared"
+                    changed = True
                 elif key in (ord("c"), ord("C")):
                     for module in modules:
                         if module["address"]:
                             connect_module(module)
                     message = "Connecting selected BMS modules"
+                    changed = True
                 elif key in (10, 13) and devices:  # SolarOS canonical Enter is LF.
                     message = select_device(modules, devices[selected])
                     if modules[0]["address"] and modules[1]["address"]:
@@ -640,16 +659,21 @@ def main():
                             message += "; saved. Press C to connect"
                         else:
                             message += "; save failed"
+                    changed = True
                 elif key == gfx.KEY_UP and devices:
                     selected = max(0, selected - 1)
+                    changed = True
                 elif key == gfx.KEY_DOWN and devices:
                     selected = min(len(devices) - 1, selected + 1)
+                    changed = True
             elif key == gfx.KEY_UP:
                 layout = (layout - 1) % LAYOUT_COUNT if page == PAGE_SUMMARY else (page - 1) % PAGE_COUNT
+                changed = True
             elif key == gfx.KEY_DOWN:
                 layout = (layout + 1) % LAYOUT_COUNT if page == PAGE_SUMMARY else (page + 1) % PAGE_COUNT
+                changed = True
 
-            if touch_changed or current_time - last_draw >= REDRAW_INTERVAL_MS:
+            if changed or touch_changed or current_time - last_draw >= REDRAW_INTERVAL_MS:
                 draw(page, modules, devices, selected, message, layout, touch_enabled)
                 last_draw = current_time
     finally:
