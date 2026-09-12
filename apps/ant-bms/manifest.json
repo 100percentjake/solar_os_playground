@@ -1,7 +1,7 @@
 {
   "id": "ant-bms",
   "name": "ANT BMS",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "runtime": "python",
   "entry": "ant_bms.py",
   "category": "utilities",

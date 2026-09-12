@@ -330,7 +330,9 @@ def foreground_for_soc(soc):
 def background_for_soc(soc):
     if soc <= LOW_SOC_PERCENT:
         return gfx.rgb(255, 219, 219)
-    return gfx.rgb(244, 248, 252)
+    # Semantic WHITE resolves to the active setterm background.  The native
+    # graphics service also applies the target's inversion before presenting.
+    return gfx.WHITE
 
 
 def aggregate(modules):
