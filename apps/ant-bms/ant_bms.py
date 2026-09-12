@@ -398,18 +398,24 @@ def draw_summary(width, height, modules, layout, touch_enabled):
 
     margin = max(8, width // 40)
     primary = foreground_for_soc(soc)
-    draw = max(0.0, total["current"])
-    runtime = int(total["remaining"] * 3600 / draw) if draw >= 0.1 else 0
+    charging = total["current"] < -0.1
+    amps = abs(total["current"])
+    runtime = (int((total["capacity"] - total["remaining"]) * 3600 / amps)
+               if charging and amps >= 0.1 else
+               int(total["remaining"] * 3600 / amps) if amps >= 0.1 else 0)
+    runtime_label = "EST. TO FULL" if charging else "EST. TO 0"
+    current_label = "CHARGE" if charging else "DRAW"
+    current_color = gfx.rgb(0, 125, 65) if charging else gfx.rgb(185, 35, 25)
     power = total["voltage"] * total["current"]
 
     if layout == LAYOUT_POWER:
         text(margin, 76, "LIVE POWER", gfx.FONT_BOLD_16, gfx.DARK)
-        text(margin, 121, "%.1f A" % total["current"], gfx.FONT_BOLD_20, gfx.rgb(35, 105, 190))
-        amp_max = max(10.0, draw * 1.25)
-        draw_gauge(margin, 134, width - margin * 2, 24, draw, amp_max, gfx.rgb(35, 105, 190))
-        text(margin, 188, "%.0f W" % power, gfx.FONT_BOLD_20, gfx.BLACK)
+        text(margin, 121, "%s  %.1f A" % (current_label, amps), gfx.FONT_BOLD_20, current_color)
+        amp_max = max(10.0, amps * 1.25)
+        draw_gauge(margin, 134, width - margin * 2, 24, amps, amp_max, current_color)
+        text(margin, 188, "%+.0f W" % power, gfx.FONT_BOLD_20, gfx.BLACK)
         text(margin, 213, "PACK  %.2f V     SOC  %.0f%%" % (total["voltage"], soc), gfx.FONT_BOLD_14, primary)
-        text(margin, min(height - 7, 236), "EST. TO 0  %s" % format_runtime(runtime), gfx.FONT_BOLD_14, primary)
+        text(margin, min(height - 7, 236), "%s  %s" % (runtime_label, format_runtime(runtime)), gfx.FONT_BOLD_14, primary)
         return
 
     if layout == LAYOUT_ENERGY:
@@ -417,8 +423,8 @@ def draw_summary(width, height, modules, layout, touch_enabled):
         text(margin, 126, "%.0f%%" % soc, gfx.FONT_BOLD_20, primary)
         draw_gauge(margin, 140, width - margin * 2, 24, soc, 100.0, primary)
         text(margin, 188, "%.1f / %.1f Ah" % (total["remaining"], total["capacity"]), gfx.FONT_BOLD_16, gfx.BLACK)
-        text(margin, 215, "EST. TO 0  %s" % format_runtime(runtime), gfx.FONT_BOLD_16, primary)
-        text(margin, min(height - 7, 236), "PACK  %.2f V   DRAW  %.1f A" % (total["voltage"], total["current"]), gfx.FONT_SMALL, gfx.DARK)
+        text(margin, 215, "%s  %s" % (runtime_label, format_runtime(runtime)), gfx.FONT_BOLD_16, primary)
+        text(margin, min(height - 7, 236), "PACK  %.2f V   %s  %.1f A" % (total["voltage"], current_label, amps), gfx.FONT_SMALL, gfx.DARK)
         return
 
     text(margin, 85, "SOC", gfx.FONT_BOLD_16, gfx.DARK)
@@ -432,10 +438,10 @@ def draw_summary(width, height, modules, layout, touch_enabled):
     text(margin, y + 21, "BMS 1  %s" % ("%.2f V" % bms1["voltage"] if bms1["valid"] else "--"), gfx.FONT_SMALL, gfx.DARK)
     text(width // 2, y + 21, "BMS 2  %s" % ("%.2f V" % bms2["voltage"] if bms2["valid"] else "--"), gfx.FONT_SMALL, gfx.DARK)
 
-    amp_max = max(10.0, draw * 1.25)
-    text(margin, y + 45, "DRAW  %.1f A" % total["current"], gfx.FONT_BOLD_14, gfx.BLACK)
-    draw_gauge(margin + 112, y + 32, width - margin - 122, 18, draw, amp_max, gfx.rgb(35, 105, 190))
-    text(margin, y + 72, "EST. TO 0  %s" % format_runtime(runtime), gfx.FONT_BOLD_14, primary)
+    amp_max = max(10.0, amps * 1.25)
+    text(margin, y + 45, "%s  %.1f A" % (current_label, amps), gfx.FONT_BOLD_14, current_color)
+    draw_gauge(margin + 112, y + 32, width - margin - 122, 18, amps, amp_max, current_color)
+    text(margin, y + 72, "%s  %s" % (runtime_label, format_runtime(runtime)), gfx.FONT_BOLD_14, primary)
 
 
 def draw_cells(width, height, module, page):
@@ -506,7 +512,13 @@ def clipped_text(value, width):
 
 
 def draw_setup(width, height, devices, selected, modules, message):
-    draw_header(width, PAGE_SETUP, message, aggregate(modules)["soc"])
+    # Setup is intentionally monochrome and entirely theme-semantic, unlike
+    # the data dashboards whose status colors carry battery meaning.
+    gfx.color(gfx.BLACK)
+    gfx.fill_rect(0, 0, width, 27)
+    text(8, 20, APP_NAME, gfx.FONT_BOLD_16, gfx.WHITE)
+    text(width - 45, 19, "SETUP", gfx.FONT_SMALL, gfx.WHITE)
+    text(8, 43, message[:44], gfx.FONT_SMALL, gfx.DARK)
     # Keep the action legend inside a 320-pixel T-Deck display.  Separate
     # rows remain legible on narrow panels and need no text measurement API.
     text(8, 59, "Enter select    R scan", gfx.FONT_SMALL, gfx.DARK)
@@ -551,8 +563,8 @@ def select_device(modules, device):
             module["address"] = device["address"]
             module["addr_type"] = device["addr_type"]
             module["name"] = device.get("name", "")
-            return module["label"] + " selected"
-    return "Both BMS slots are already selected; X clears them"
+            return module
+    return None
 
 
 def handle_touch(starts, event_list, page, layout, width, height):
@@ -630,6 +642,10 @@ def main():
             elif key == gfx.KEY_RIGHT:
                 page = (page + 1) % PAGE_COUNT
                 changed = True
+            elif key in (ord("s"), ord("S")):
+                page = PAGE_SETUP
+                message = "Select a BMS, R to scan, C to reconnect"
+                changed = True
             elif page == PAGE_SETUP:
                 if key in (ord("r"), ord("R")):
                     message = "Scanning for BLE devices..."
@@ -655,12 +671,19 @@ def main():
                     message = "Connecting selected BMS modules"
                     changed = True
                 elif key in (10, 13) and devices:  # SolarOS canonical Enter is LF.
-                    message = select_device(modules, devices[selected])
-                    if modules[0]["address"] and modules[1]["address"]:
-                        if save_config(modules):
-                            message += "; saved. Press C to connect"
+                    module = select_device(modules, devices[selected])
+                    if module is None:
+                        message = "Both BMS slots are selected; X clears them"
+                    elif not save_config(modules):
+                        message = module["label"] + " selected, but save failed"
+                    else:
+                        message = "Connecting " + module["label"] + "..."
+                        draw(page, modules, devices, selected, message, layout, touch_enabled)
+                        if connect_module(module):
+                            message = module["label"] + " connected"
+                            page = PAGE_SUMMARY
                         else:
-                            message += "; save failed"
+                            message = module["label"] + " " + module["last_error"]
                     changed = True
                 elif key == gfx.KEY_UP and devices:
                     selected = max(0, selected - 1)
