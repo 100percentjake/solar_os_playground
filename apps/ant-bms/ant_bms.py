@@ -512,17 +512,13 @@ def clipped_text(value, width):
 
 
 def draw_setup(width, height, devices, selected, modules, message):
-    # Setup is intentionally monochrome and entirely theme-semantic, unlike
-    # the data dashboards whose status colors carry battery meaning.
-    gfx.color(gfx.BLACK)
-    gfx.fill_rect(0, 0, width, 27)
-    text(8, 20, APP_NAME, gfx.FONT_BOLD_16, gfx.WHITE)
-    text(width - 45, 19, "SETUP", gfx.FONT_SMALL, gfx.WHITE)
-    text(8, 43, message[:44], gfx.FONT_SMALL, gfx.BLACK)
+    # Setup is a first-class dashboard: its header and page tint follow the
+    # same live SOC state as the other pages.
+    draw_header(width, PAGE_SETUP, message, aggregate(modules)["soc"])
     # Keep the action legend inside a 320-pixel T-Deck display.  Separate
     # rows remain legible on narrow panels and need no text measurement API.
-    text(8, 59, "Enter select    R scan", gfx.FONT_SMALL, gfx.BLACK)
-    text(8, 74, "C connect       X clear", gfx.FONT_SMALL, gfx.BLACK)
+    text(8, 59, "Enter select    R scan", gfx.FONT_SMALL, gfx.DARK)
+    text(8, 74, "C connect       X clear", gfx.FONT_SMALL, gfx.DARK)
     for index, module in enumerate(modules):
         detail = module["name"] or module["address"] or "not selected"
         text(8, 92 + index * 17, "%s: %s" % (module["label"], detail), gfx.FONT_SMALL, gfx.BLACK)
@@ -534,9 +530,9 @@ def draw_setup(width, height, devices, selected, modules, message):
         if index == selected:
             # Named colors track the user's setterm foreground/background
             # palette; literal RGB selection colors do not.
-            gfx.color(gfx.BLACK)
+            gfx.color(gfx.DARK)
             gfx.fill_rect(4, top + row * 18 - 13, width - 8, 17)
-        color = gfx.WHITE if index == selected else gfx.BLACK
+        color = gfx.WHITE if index == selected else gfx.DARK
         text(8, top + row * 18, clipped_text(device_label(device), width), gfx.FONT_SMALL, color)
 
 
