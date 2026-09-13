@@ -665,10 +665,20 @@ def main():
                     message = "BMS selection cleared"
                     changed = True
                 elif key in (ord("c"), ord("C")):
-                    for module in modules:
-                        if module["address"]:
-                            connect_module(module)
-                    message = "Connecting selected BMS modules"
+                    if not modules[0]["address"] or not modules[1]["address"]:
+                        message = "Select both BMS entries before connecting"
+                    else:
+                        message = "Verifying BMS connections..."
+                        draw(page, modules, devices, selected, message, layout, touch_enabled)
+                        success = True
+                        for module in modules:
+                            if not module["connected"] and not connect_module(module):
+                                success = False
+                        if success:
+                            message = "Both BMS modules connected"
+                            page = PAGE_SUMMARY
+                        else:
+                            message = "Connection failed; check BMS status"
                     changed = True
                 elif key in (10, 13) and devices:  # SolarOS canonical Enter is LF.
                     module = select_device(modules, devices[selected])
@@ -680,8 +690,7 @@ def main():
                         message = "Connecting " + module["label"] + "..."
                         draw(page, modules, devices, selected, message, layout, touch_enabled)
                         if connect_module(module):
-                            message = module["label"] + " connected"
-                            page = PAGE_SUMMARY
+                            message = module["label"] + " connected; select the other BMS"
                         else:
                             message = module["label"] + " " + module["last_error"]
                     changed = True
