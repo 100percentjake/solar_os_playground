@@ -253,6 +253,30 @@
       "version": "1.1.0"
     },
     {
+      "archive": "packages/addressbook/1.1.0/addressbook-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
+      "entry": "addressbook.py",
+      "id": "addressbook",
+      "min_solaros": "4.8.4",
+      "name": "Address Book",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "862677b35fd6e0c11f541ab58e33512a6391f70649e1de30e0312123f952176c",
+      "size": 12113,
+      "tags": [
+        "address-book",
+        "contacts",
+        "offline",
+        "organization",
+        "people"
+      ],
+      "version": "1.1.0"
+    },
+    {
       "archive": "packages/calendar/1.1.0/calendar-1.1.0.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
@@ -275,30 +299,6 @@
         "offline",
         "organization",
         "subscriptions"
-      ],
-      "version": "1.1.0"
-    },
-    {
-      "archive": "packages/addressbook/1.1.0/addressbook-1.1.0.sopkg",
-      "author": "Victor Khaze",
-      "category": "utilities",
-      "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
-      "entry": "addressbook.py",
-      "id": "addressbook",
-      "min_solaros": "4.8.4",
-      "name": "Contacts",
-      "requires": [
-        "gfx"
-      ],
-      "runtime": "python",
-      "sha256": "407e8ca427522b080d4f74d7c124fc517592e0b7b7be667a974cc36f472fac95",
-      "size": 12111,
-      "tags": [
-        "address-book",
-        "contacts",
-        "offline",
-        "organization",
-        "people"
       ],
       "version": "1.1.0"
     },
