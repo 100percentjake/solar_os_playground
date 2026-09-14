@@ -11,8 +11,8 @@
       "name": "Hello Lua",
       "requires": [],
       "runtime": "lua",
-      "sha256": "903acb38d28b762eba1652c5a8e7cb1b908c6b89bfd542ca3125f77510223723",
-      "size": 639,
+      "sha256": "67e895648527527d43ddea551f9c4d371bb01e24347e426055be5c3090746b59",
+      "size": 644,
       "tags": [
         "hello",
         "starter"
@@ -30,8 +30,8 @@
       "name": "Hello Python",
       "requires": [],
       "runtime": "python",
-      "sha256": "ca79f17ae358f4efc19e70225004aebd855ef253785046fb158f19206f756571",
-      "size": 645,
+      "sha256": "f5c0987e22d8902d29d50bb07b16f7710f0f24e0a79a8059fa1426e9459f65bf",
+      "size": 650,
       "tags": [
         "hello",
         "starter"
@@ -51,8 +51,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "747a195aa646786ea800c07cd4261d745aa2dac3d105e3db3afeecc3bbacc036",
-      "size": 1090,
+      "sha256": "9ef3e9e531bef9513d162ddfbb7fba470afd6deeb59e8e6868353da73d593848",
+      "size": 1099,
       "tags": [
         "fractal",
         "graphics",
@@ -74,8 +74,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "43fc83c5448955b418641221ee3b748ceccd8f062add9ba52159cf3d60f9b6f0",
-      "size": 1499,
+      "sha256": "09675c1f8a51081a7305cd83a83db27db51fb513d25fc3145c859cb0d6ed5afc",
+      "size": 1516,
       "tags": [
         "fractal",
         "graphics",
@@ -98,8 +98,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "1bc64c6596fbc68051c919300d881c75809b2835f98ef0478db1f2c8671ab0ac",
-      "size": 2711,
+      "sha256": "1622c244ccc62b07451ddff4a7be12b906a8245668bb73a691c06334542948cd",
+      "size": 2736,
       "tags": [
         "arcade",
         "game",
@@ -122,8 +122,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "287fe7ea2cc5ad33c1929408e1734d0a219faaf53e8ae66bd9fc19917f0cf8d3",
-      "size": 2642,
+      "sha256": "373520d50055228a33483751ddc7c6cc957ce788b2167512428800e8124f9111",
+      "size": 2669,
       "tags": [
         "arcade",
         "game",
@@ -145,8 +145,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "e6aa30fc02cb26da0467608ef42f40f8c17fb0212c71dfb75b6bb5c28acc8f01",
-      "size": 4126,
+      "sha256": "66d99286cd63ba02f3176cf5cb251d5d5c26df2e4cfa7316aed57c6be767ab5d",
+      "size": 4164,
       "tags": [
         "boxes",
         "e-paper",
@@ -170,8 +170,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "7f7b8d5b4abd638563bbc18e75219978b1441ad07337905fc73bce9fec721c55",
-      "size": 6365,
+      "sha256": "2e35b49bc80b2ffd93a051c39422df9d571d9a6d6c758e920f097110538a6a86",
+      "size": 6431,
       "tags": [
         "audio",
         "chromatic",
@@ -194,8 +194,8 @@
         "gfx"
       ],
       "runtime": "lua",
-      "sha256": "5986ae138473d45316f83a721943f4eb15cedc29b918c322aa8498e20e3f208f",
-      "size": 4869,
+      "sha256": "953fa092a236c79c22de281dd19e39e07741f7d0e15e56991961d971d8443a5c",
+      "size": 4899,
       "tags": [
         "angles",
         "geometry",
@@ -242,8 +242,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "2d7a64958d1e1f3ed36a8fe48c95abf74cf5babaa992c3266dc71094fdef0a5e",
-      "size": 37687,
+      "sha256": "9cad790dfedcf32b4c51ff4867895a5ea1ba6ed42240e25889c68d7c2f6d1a65",
+      "size": 37952,
       "tags": [
         "chat",
         "cyberspace",
@@ -251,6 +251,80 @@
         "tui"
       ],
       "version": "1.1.0"
+    },
+    {
+      "archive": "packages/calendar/1.1.0/calendar-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Offline graphical calendar with recurring events, reminders, ICS subscriptions, search, and import and export.",
+      "entry": "calendar.py",
+      "id": "calendar",
+      "min_solaros": "4.8.4",
+      "name": "Calendar",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "645095c25d0034e43256588d56e275577a76dfeeb82cfee630ba772b23bc6c55",
+      "size": 25526,
+      "tags": [
+        "agenda",
+        "calendar",
+        "ics",
+        "offline",
+        "organization",
+        "subscriptions"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/addressbook/1.1.0/addressbook-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
+      "entry": "addressbook.py",
+      "id": "addressbook",
+      "min_solaros": "4.8.4",
+      "name": "Contacts",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "407e8ca427522b080d4f74d7c124fc517592e0b7b7be667a974cc36f472fac95",
+      "size": 12111,
+      "tags": [
+        "address-book",
+        "contacts",
+        "offline",
+        "organization",
+        "people"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/copyparty/1.8.0/copyparty-1.8.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Save and browse copyparty servers, download files and folders, and upload small files.",
+      "entry": "copyparty.py",
+      "id": "copyparty",
+      "min_solaros": "4.8.4",
+      "name": "copyparty Client",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "f46a3ab6466056a499c2214fa5c250d6e76ac510ff87d646a33a4fe46b8f954d",
+      "size": 16443,
+      "tags": [
+        "copyparty",
+        "download",
+        "files",
+        "storage",
+        "upload"
+      ],
+      "version": "1.8.0"
     },
     {
       "archive": "packages/home-assistant/1.0.0/home-assistant-1.0.0.sopkg",
@@ -274,6 +348,30 @@
         "iot",
         "lights",
         "smart-home"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/launcher-builder/1.0.0/launcher-builder-1.0.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical editor for SolarOS launcher grids, apps, commands, labels, and native icons.",
+      "entry": "launcher_builder.py",
+      "id": "launcher-builder",
+      "min_solaros": "4.8.4",
+      "name": "Launcher Builder",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "36d394b76e19ff24a7452ec64bd615d5742ade24db794dd24b5fe4497431ffe0",
+      "size": 12384,
+      "tags": [
+        "configuration",
+        "gfx",
+        "icons",
+        "launcher",
+        "utilities"
       ],
       "version": "1.0.0"
     },
@@ -314,8 +412,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "4af4872a2c68445a4dd23920b792059e66684ca91c86be8b98ef6a6039a896d0",
-      "size": 5663,
+      "sha256": "4b53bbd186194a8c44aa4abcdec41c1785d69154221acbaf7508621ee4b1da05",
+      "size": 5718,
       "tags": [
         "e-paper",
         "qr",
@@ -362,7 +460,7 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "f0758c05abc7f204f632cbfd63dfa2c120c4c0b7b8453eb564e440009193df06",
+      "sha256": "b3228c88e837116996967255421306bbc0dcfd3bcf197c7471002a6e1093ba2b",
       "size": 14498,
       "tags": [
         "offline",
@@ -387,8 +485,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "2225fc16a7143d6a955c6c96addf148c795553fce47e7208aac1997274c22c51",
-      "size": 7938,
+      "sha256": "8ed50abefad6c44f53938ec52a021d28281bc1e4155ac348d4ff9d15280228a5",
+      "size": 7998,
       "tags": [
         "forecast",
         "open-meteo",
