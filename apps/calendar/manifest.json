@@ -1,0 +1,13 @@
+{
+  "id": "calendar",
+  "name": "Calendar",
+  "version": "1.1.0",
+  "runtime": "python",
+  "entry": "calendar.py",
+  "category": "utilities",
+  "description": "Offline graphical calendar with recurring events, reminders, ICS subscriptions, search, and import and export.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["agenda", "calendar", "ics", "offline", "organization", "subscriptions"],
+  "requires": ["gfx", "wifi"]
+}

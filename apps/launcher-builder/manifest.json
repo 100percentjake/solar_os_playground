@@ -1,0 +1,13 @@
+{
+  "id": "launcher-builder",
+  "name": "Launcher Builder",
+  "version": "1.0.0",
+  "runtime": "python",
+  "entry": "launcher_builder.py",
+  "category": "utilities",
+  "description": "Graphical editor for SolarOS launcher grids, apps, commands, labels, and native icons.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["configuration", "gfx", "icons", "launcher", "utilities"],
+  "requires": ["gfx"]
+}

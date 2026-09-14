@@ -1,0 +1,13 @@
+{
+  "id": "todo",
+  "name": "Todo List",
+  "version": "1.1.2",
+  "runtime": "python",
+  "entry": "todo.py",
+  "category": "utilities",
+  "description": "Graphical task lists with projects, recurring tasks, completion history, and exports.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["offline", "organization", "projects", "tasks", "todo"],
+  "requires": ["gfx"]
+}

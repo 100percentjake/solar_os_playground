@@ -1,0 +1,13 @@
+{
+  "id": "addressbook",
+  "name": "Address Book",
+  "version": "1.1.0",
+  "runtime": "python",
+  "entry": "addressbook.py",
+  "category": "utilities",
+  "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["address-book", "contacts", "offline", "organization", "people"],
+  "requires": ["gfx"]
+}
