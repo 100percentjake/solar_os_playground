@@ -253,6 +253,104 @@
       "version": "1.1.0"
     },
     {
+      "archive": "packages/calendar/1.1.0/calendar-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Offline graphical calendar with recurring events, reminders, ICS subscriptions, search, and import and export.",
+      "entry": "calendar.py",
+      "id": "calendar",
+      "min_solaros": "4.8.4",
+      "name": "Calendar",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "f61fe49e5d5d3ae2dc47f410cf5e88579f4d563578858dba51e688d8361413ca",
+      "size": 25526,
+      "tags": [
+        "agenda",
+        "calendar",
+        "ics",
+        "offline",
+        "organization",
+        "subscriptions"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/addressbook/1.1.0/addressbook-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
+      "entry": "addressbook.py",
+      "id": "addressbook",
+      "min_solaros": "4.8.4",
+      "name": "Contacts",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "b692c6ef5c69d6a0b6f7ab95664edc44b3873f055fc428e6ed6a6f4a6dcac16e",
+      "size": 12111,
+      "tags": [
+        "address-book",
+        "contacts",
+        "offline",
+        "organization",
+        "people"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/copyparty/1.8.0/copyparty-1.8.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Save and browse copyparty servers, download files and folders, and upload small files.",
+      "entry": "copyparty.py",
+      "id": "copyparty",
+      "min_solaros": "4.8.4",
+      "name": "copyparty Client",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "d86d4d9e6329687c3a134d8ff5a0660283558ba009709c54661fd7e6cb5f668c",
+      "size": 16443,
+      "tags": [
+        "copyparty",
+        "download",
+        "files",
+        "storage",
+        "upload"
+      ],
+      "version": "1.8.0"
+    },
+    {
+      "archive": "packages/launcher-builder/1.0.0/launcher-builder-1.0.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical editor for SolarOS launcher grids, apps, commands, labels, and native icons.",
+      "entry": "launcher_builder.py",
+      "id": "launcher-builder",
+      "min_solaros": "4.8.4",
+      "name": "Launcher Builder",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "ac96e8ef1cdfc959e123ed03f9786eb13d2e0a707ce8c4492ea10fba14c0e0e4",
+      "size": 12384,
+      "tags": [
+        "configuration",
+        "gfx",
+        "icons",
+        "launcher",
+        "utilities"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/opds/1.0.1/opds-1.0.1.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
@@ -323,6 +421,30 @@
         "rss"
       ],
       "version": "1.1.1"
+    },
+    {
+      "archive": "packages/todo/1.1.2/todo-1.1.2.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical task lists with projects, recurring tasks, completion history, and exports.",
+      "entry": "todo.py",
+      "id": "todo",
+      "min_solaros": "4.8.4",
+      "name": "Todo List",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "f0758c05abc7f204f632cbfd63dfa2c120c4c0b7b8453eb564e440009193df06",
+      "size": 14498,
+      "tags": [
+        "offline",
+        "organization",
+        "projects",
+        "tasks",
+        "todo"
+      ],
+      "version": "1.1.2"
     },
     {
       "archive": "packages/weather/1.0.0/weather-1.0.0.sopkg",

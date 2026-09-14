@@ -1,0 +1,13 @@
+{
+  "id": "copyparty",
+  "name": "copyparty Client",
+  "version": "1.8.0",
+  "runtime": "python",
+  "entry": "copyparty.py",
+  "category": "utilities",
+  "description": "Save and browse copyparty servers, download files and folders, and upload small files.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["copyparty", "download", "files", "storage", "upload"],
+  "requires": ["wifi"]
+}
