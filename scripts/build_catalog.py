@@ -35,6 +35,8 @@ REQUIRED = {
 MAX_CATEGORIES = 24
 MAX_APPS = 64
 MAX_PACKAGE_SIZE = 2 * 1024 * 1024
+ZIP_CREATE_SYSTEM = 3
+ZIP_TIMESTAMP = (2020, 1, 1, 0, 0, 0)
 CAPABILITIES = {
     "psram",
     "display",
@@ -207,20 +209,21 @@ def validate_manifest(directory: Path, category_ids: set[str]) -> dict[str, obje
 
 def write_package(directory: Path, manifest: dict[str, object], output: Path) -> None:
     files = application_files(directory)
-    timestamp = (2020, 1, 1, 0, 0, 0)
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         manifest_bytes = (
             json.dumps(manifest, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
         ).encode("utf-8")
-        info = zipfile.ZipInfo("manifest.json", timestamp)
+        info = zipfile.ZipInfo("manifest.json", ZIP_TIMESTAMP)
+        info.create_system = ZIP_CREATE_SYSTEM
         info.compress_type = zipfile.ZIP_DEFLATED
         info.external_attr = 0o644 << 16
         archive.writestr(info, manifest_bytes)
         for source in files:
             relative = source.relative_to(directory).as_posix()
             safe_relative(relative, "package file")
-            info = zipfile.ZipInfo(relative, timestamp)
+            info = zipfile.ZipInfo(relative, ZIP_TIMESTAMP)
+            info.create_system = ZIP_CREATE_SYSTEM
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o644 << 16
             archive.writestr(info, source.read_bytes())
