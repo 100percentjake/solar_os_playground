@@ -331,6 +331,15 @@ def aggregate(modules):
             "remaining": remaining, "capacity": capacity}
 
 
+def soc_gauge_color(soc):
+    """Color only non-text gauge fills; monochrome targets dither these safely."""
+    if soc <= 20.0:
+        return gfx.rgb(185, 35, 25)
+    if soc <= 40.0:
+        return gfx.rgb(185, 115, 0)
+    return gfx.rgb(0, 110, 65)
+
+
 def text(x, y, value, font=None, color=None):
     if font is not None:
         gfx.font(font)
@@ -387,7 +396,8 @@ def draw_summary(width, height, modules, layout, touch_enabled):
                int(total["remaining"] * 3600 / amps) if amps >= 0.1 else 0)
     runtime_label = "EST. TO FULL" if charging else "EST. TO 0"
     current_label = "CHARGE" if charging else "DRAW"
-    current_color = gfx.DARK
+    current_color = gfx.rgb(0, 125, 65) if charging else gfx.rgb(185, 35, 25)
+    soc_color = soc_gauge_color(soc)
     power = total["voltage"] * total["current"]
 
     if layout == LAYOUT_POWER:
@@ -403,7 +413,7 @@ def draw_summary(width, height, modules, layout, touch_enabled):
     if layout == LAYOUT_ENERGY:
         text(margin, 76, "AVAILABLE ENERGY", gfx.FONT_BOLD_16, gfx.DARK)
         text(margin, 126, "%.0f%%" % soc, gfx.FONT_BOLD_20, primary)
-        draw_gauge(margin, 140, width - margin * 2, 24, soc, 100.0, primary)
+        draw_gauge(margin, 140, width - margin * 2, 24, soc, 100.0, soc_color)
         text(margin, 188, "%.1f / %.1f Ah" % (total["remaining"], total["capacity"]), gfx.FONT_BOLD_16, gfx.BLACK)
         text(margin, 215, "%s  %s" % (runtime_label, format_runtime(runtime)), gfx.FONT_BOLD_16, primary)
         text(margin, min(height - 7, 236), "PACK  %.2f V   %s  %.1f A" % (total["voltage"], current_label, amps), gfx.FONT_SMALL, gfx.DARK)
@@ -411,7 +421,7 @@ def draw_summary(width, height, modules, layout, touch_enabled):
 
     text(margin, 85, "SOC", gfx.FONT_BOLD_16, gfx.DARK)
     text(margin, 126, "%.0f%%" % soc, gfx.FONT_BOLD_20, primary)
-    draw_gauge(margin + 85, 91, width - margin - 95, 24, soc, 100.0, primary)
+    draw_gauge(margin + 85, 91, width - margin - 95, 24, soc, 100.0, soc_color)
 
     y = 151
     text(margin, y, "PACK  %.2f V" % total["voltage"], gfx.FONT_BOLD_14, gfx.BLACK)
@@ -446,14 +456,18 @@ def draw_cells(width, height, module, page):
         x = column * cell_width + 5
         y = top + row * cell_height
         normalized = (voltage - reading["min_cell"]) / span
-        color = gfx.DARK
+        color = gfx.rgb(0, 110, 65)
         if voltage == reading["min_cell"] or voltage == reading["max_cell"]:
-            color = gfx.BLACK
+            color = gfx.rgb(185, 35, 25)
         elif normalized < 0.2 or normalized > 0.8:
-            color = gfx.LIGHT
+            color = gfx.rgb(185, 115, 0)
+        # A colored stripe is a readable dither fallback: no text is ever
+        # drawn on top of a literal color fill.
+        gfx.color(gfx.DARK)
+        gfx.rect(x, y, cell_width - 9, cell_height - 3)
         gfx.color(color)
-        gfx.fill_rect(x, y, cell_width - 9, cell_height - 3)
-        text(x + 3, y + cell_height - 7, "C%02d %.3f" % (index + 1, voltage), gfx.FONT_SMALL, gfx.WHITE)
+        gfx.fill_rect(x + 1, y + 1, cell_width - 11, 3)
+        text(x + 3, y + cell_height - 7, "C%02d %.3f" % (index + 1, voltage), gfx.FONT_SMALL, gfx.BLACK)
     text(8, height - 4, "min %.3f  max %.3f  delta %.3f" %
          (reading["min_cell"], reading["max_cell"], reading["delta_cell"]), gfx.FONT_SMALL, gfx.DARK)
 
@@ -510,9 +524,8 @@ def draw_setup(width, height, devices, selected, modules, message):
     for row, device in enumerate(devices[first:first + visible]):
         index = first + row
         if index == selected:
-            # Named colors track the user's setterm foreground/background
-            # palette; literal RGB selection colors do not.
-            gfx.color(gfx.DARK)
+            # Solid semantic contrast stays readable on monochrome targets.
+            gfx.color(gfx.BLACK)
             gfx.fill_rect(4, top + row * 18 - 13, width - 8, 17)
         color = gfx.WHITE if index == selected else gfx.DARK
         text(8, top + row * 18, clipped_text(device_label(device), width), gfx.FONT_SMALL, color)
