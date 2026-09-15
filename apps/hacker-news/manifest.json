@@ -1,0 +1,13 @@
+{
+  "id": "hacker-news",
+  "name": "Hacker News",
+  "version": "1.0.0",
+  "runtime": "python",
+  "entry": "hacker_news.py",
+  "category": "social",
+  "description": "Text-first Hacker News browser with collapsible, scrollable comment threads.",
+  "author": "Jake",
+  "min_solaros": "4.8.4",
+  "tags": ["comments", "hacker-news", "news", "threads"],
+  "requires": ["wifi"]
+}
