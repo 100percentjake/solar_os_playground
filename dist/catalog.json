@@ -253,7 +253,7 @@
       "version": "1.1.0"
     },
     {
-      "archive": "packages/hacker-news/1.0.0/hacker-news-1.0.0.sopkg",
+      "archive": "packages/hacker-news/1.0.1/hacker-news-1.0.1.sopkg",
       "author": "Jake",
       "category": "social",
       "description": "Text-first Hacker News browser with collapsible, scrollable comment threads.",
@@ -265,15 +265,15 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "f723e3c6f8817b8d2dcc1e31213046141a3ec7e67f2022003736b49572e24af7",
-      "size": 4930,
+      "sha256": "52013cf868886b6f3ffed473d9c9b3af8b2db2ce49a5f122535256a26889e979",
+      "size": 5502,
       "tags": [
         "comments",
         "hacker-news",
         "news",
         "threads"
       ],
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     {
       "archive": "packages/ant-bms/1.0.11/ant-bms-1.0.11.sopkg",

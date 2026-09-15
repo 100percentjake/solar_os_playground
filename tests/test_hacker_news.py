@@ -56,6 +56,46 @@ class HackerNewsTest(unittest.TestCase):
         self.assertEqual(self.app.domain("https://www.example.com/a?q=1"), "example.com")
         self.assertEqual(self.app.domain(""), "")
 
+    def test_large_json_integers_are_safe_on_solaros(self):
+        parsed = self.app.safe_json_loads(
+            b'{"id":45200001,"time":1758000000,"score":42,'
+            b'"text":"number 1758000000","negative":-1073741825}')
+        self.assertEqual(parsed["id"], 45200001)
+        self.assertEqual(parsed["time"], "1758000000")
+        self.assertEqual(parsed["score"], 42)
+        self.assertEqual(parsed["text"], "number 1758000000")
+        self.assertEqual(parsed["negative"], "-1073741825")
+
+    def test_item_ids_are_not_converted_through_int(self):
+        seen = []
+        original = self.app.request_json
+        self.app.request_json = lambda path: seen.append(path) or {"id": path}
+        try:
+            self.app.fetch_item("45200001")
+            self.assertEqual(seen, ["item/45200001.json"])
+            with self.assertRaisesRegex(RuntimeError, "invalid item id"):
+                self.app.fetch_item("1/other")
+        finally:
+            self.app.request_json = original
+
+    def test_http_response_with_hn_timestamp_uses_safe_decoder(self):
+        class Http:
+            @staticmethod
+            def get(url, headers, timeout, limit, follow_redirects):
+                return {"status_code": 200, "truncated": False,
+                        "body": b'{"id":45200001,"time":1758000000}'}
+
+        previous = getattr(self.app.solaros, "http", None)
+        self.app.solaros.http = Http()
+        try:
+            item = self.app.request_json("item/45200001.json")
+            self.assertEqual(item, {"id": 45200001, "time": "1758000000"})
+        finally:
+            if previous is None:
+                del self.app.solaros.http
+            else:
+                self.app.solaros.http = previous
+
     def test_collapsed_subtree_is_removed_from_visible_nodes(self):
         grandchild = {"id": 3, "children": [], "loaded": True,
                       "collapsed": False}

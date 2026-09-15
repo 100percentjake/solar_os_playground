@@ -21,6 +21,8 @@ HTTP_LIMIT = 48 * 1024
 COMMENT_TEXT_LIMIT = 1800
 KEY_ENTER = 10
 KEY_RETURN = 13
+SMALL_INT_MAX = "1073741823"
+SMALL_INT_MIN_ABS = "1073741824"
 
 
 def clean_space(value):
@@ -124,16 +126,73 @@ def domain(url):
     return value[4:] if value.startswith("www.") else value
 
 
-def age(timestamp, now):
-    try:
-        seconds = max(0, int(now) - int(timestamp))
-    except Exception:
-        return ""
-    if seconds < 3600:
-        return "{}m".format(max(1, seconds // 60))
-    if seconds < 86400:
-        return "{}h".format(seconds // 3600)
-    return "{}d".format(seconds // 86400)
+def large_integer(token):
+    negative = token.startswith("-")
+    digits = token[1:] if negative else token
+    digits = digits.lstrip("0") or "0"
+    limit = SMALL_INT_MIN_ABS if negative else SMALL_INT_MAX
+    return len(digits) > len(limit) or (len(digits) == len(limit) and digits > limit)
+
+
+def quote_large_integers(source):
+    """Protect SolarOS's small-int-only JSON decoder from large integers."""
+    output = []
+    index = 0
+    in_string = False
+    escaped = False
+    length = len(source)
+    while index < length:
+        character = source[index]
+        if in_string:
+            output.append(character)
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            index += 1
+            continue
+        if character == '"':
+            in_string = True
+            output.append(character)
+            index += 1
+            continue
+        if character == "-" or (character >= "0" and character <= "9"):
+            start = index
+            if character == "-":
+                index += 1
+                if index >= length or source[index] < "0" or source[index] > "9":
+                    output.append(character)
+                    continue
+            while index < length and source[index] >= "0" and source[index] <= "9":
+                index += 1
+            integer_end = index
+            if index < length and source[index] == ".":
+                index += 1
+                while index < length and source[index] >= "0" and source[index] <= "9":
+                    index += 1
+            if index < length and source[index] in "eE":
+                index += 1
+                if index < length and source[index] in "+-":
+                    index += 1
+                while index < length and source[index] >= "0" and source[index] <= "9":
+                    index += 1
+            token = source[start:index]
+            if integer_end == index and large_integer(token):
+                output.extend(('"', token, '"'))
+            else:
+                output.append(token)
+            continue
+        output.append(character)
+        index += 1
+    return "".join(output)
+
+
+def safe_json_loads(source):
+    if isinstance(source, bytes):
+        source = source.decode("utf-8")
+    return json.loads(quote_large_integers(source))
 
 
 def show_message(title, message, footer="Please wait"):
@@ -167,7 +226,7 @@ def request_json(path):
     if response.get("truncated"):
         raise RuntimeError("response too large")
     body = response.get("body", b"")
-    value = json.loads(body.decode("utf-8"))
+    value = safe_json_loads(body)
     body = None
     response = None
     gc.collect()
@@ -175,7 +234,11 @@ def request_json(path):
 
 
 def fetch_item(item_id):
-    item = request_json("item/{}.json".format(int(item_id)))
+    item_id = str(item_id)
+    if not item_id or any(character < "0" or character > "9"
+                          for character in item_id):
+        raise RuntimeError("invalid item id")
+    item = request_json("item/{}.json".format(item_id))
     return item if isinstance(item, dict) else {}
 
 

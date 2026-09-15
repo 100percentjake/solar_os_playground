@@ -29,3 +29,6 @@ does not attempt to open them in the SolarOS browser.
 The first level of comments is loaded when a discussion opens. Replies are
 downloaded only when their parent is expanded, keeping network traffic and
 memory use reasonable on the ESP32.
+
+Large JSON integers such as Unix timestamps are retained as strings so API
+responses remain compatible with SolarOS's small-int-only MicroPython build.
