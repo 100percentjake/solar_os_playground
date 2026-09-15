@@ -24,17 +24,22 @@ class FakeTui(types.ModuleType):
     INVERSE = 1
     BOLD = 2
 
+    def __init__(self, name):
+        super().__init__(name)
+        self.writes = []
+        self.refreshes = 0
+
     def size(self):
         return 12, 40
 
     def clear(self):
-        pass
+        raise AssertionError("live views must not clear the screen")
 
     def addstr(self, row, col, text, attr=0):
-        pass
+        self.writes.append((row, col, text, attr))
 
     def refresh(self):
-        pass
+        self.refreshes += 1
 
     def getch(self, timeout):
         return self.KEY_ESCAPE
@@ -140,6 +145,18 @@ class HackerNewsTest(unittest.TestCase):
         self.assertEqual(scroll, 3)
         self.assertEqual(selected, self.app.item_at_line(starts, 3))
         self.assertGreater(maximum, scroll)
+
+    def test_present_frame_writes_only_changed_rows(self):
+        tui = self.app.tui
+        tui.writes = []
+        self.app.LAST_FRAME = []
+        first = [("Header", tui.INVERSE), ("Body", 0), ("Footer", tui.INVERSE)]
+        self.app.present_frame(first, 3, 12)
+        self.assertEqual([write[0] for write in tui.writes], [0, 1, 2])
+        tui.writes = []
+        second = [("Header", tui.INVERSE), ("Body", 0), ("Loading", tui.INVERSE)]
+        self.app.present_frame(second, 3, 12)
+        self.assertEqual([write[0] for write in tui.writes], [2])
 
     def test_children_are_published_one_at_a_time(self):
         parent = {"depth": -1, "kid_ids": [1, 2], "children": [],

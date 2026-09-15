@@ -33,7 +33,9 @@ memory use reasonable on the ESP32.
 
 Stories and replies append to a stable list as each request finishes. Loading
 never auto-scrolls or resets the viewport. A progress bar on the bottom row
-remains visible while a batch is loading, and an idle view is not redrawn.
+remains visible while a batch is loading, and an idle view is not redrawn. The
+app retains its last frame and writes only rows that changed; it never clears
+the live screen between frames.
 
 Large JSON integers such as Unix timestamps are retained as strings so API
 responses remain compatible with SolarOS's small-int-only MicroPython build.

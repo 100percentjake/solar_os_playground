@@ -23,6 +23,7 @@ KEY_ENTER = 10
 KEY_RETURN = 13
 SMALL_INT_MAX = "1073741823"
 SMALL_INT_MIN_ABS = "1073741824"
+LAST_FRAME = []
 
 
 def clean_space(value):
@@ -195,18 +196,33 @@ def safe_json_loads(source):
     return json.loads(quote_large_integers(source))
 
 
+def present_frame(frame, rows, cols):
+    """Write only changed rows, without ever presenting a cleared frame."""
+    global LAST_FRAME
+    normalized = []
+    for row in range(rows):
+        text, attr = frame[row] if row < len(frame) else ("", 0)
+        text = str(text or "")
+        padded = (text[:cols] + (" " * cols))[:cols]
+        normalized.append((padded, attr))
+        if row >= len(LAST_FRAME) or LAST_FRAME[row] != normalized[-1]:
+            tui.addstr(row, 0, padded, attr)
+    LAST_FRAME = normalized
+    tui.refresh()
+
+
 def show_message(title, message, footer="Please wait"):
     rows, cols = tui.size()
-    tui.clear()
-    tui.addstr(0, 0, clip(" " + title + " ", cols), tui.INVERSE)
+    frame = [("", 0) for unused in range(rows)]
+    frame[0] = (clip(" " + title + " ", cols), tui.INVERSE)
     row = 2
     for line in wrap(message, cols - 2):
         if row >= rows - 1:
             break
-        tui.addstr(row, 1, line)
+        frame[row] = (" " + line, 0)
         row += 1
-    tui.addstr(rows - 1, 0, clip(footer, cols), tui.INVERSE)
-    tui.refresh()
+    frame[rows - 1] = (clip(footer, cols), tui.INVERSE)
+    present_frame(frame, rows, cols)
 
 
 def wait_key():
@@ -307,14 +323,14 @@ def visible_nodes(root):
     return result
 
 
-def progress_footer(row, cols, label, done, total):
+def progress_text(cols, label, done, total):
     total = max(1, total)
     done = min(total, max(0, done))
     count = "{} {}/{} ".format(label, done, total)
     width = max(1, cols - len(count) - 2)
     filled = (done * width) // total
     bar = "[" + ("#" * filled) + ("-" * (width - filled)) + "]"
-    tui.addstr(row, 0, clip(count + bar, cols), tui.INVERSE)
+    return clip(count + bar, cols)
 
 
 def item_at_line(starts, line):
@@ -367,11 +383,11 @@ def story_document(stories, cols, selected):
 
 def draw_stories(stories, scroll, feed_name, note="", loading=None):
     rows, cols = tui.size()
-    tui.clear()
+    frame = [("", 0) for unused in range(rows)]
     title = " HN: " + feed_name + " "
     if note:
         title += "| " + note + " "
-    tui.addstr(0, 0, clip(title, cols), tui.INVERSE)
+    frame[0] = (clip(title, cols), tui.INVERSE)
     plain, starts = story_document(stories, cols, -1)
     maximum = max(0, len(plain) - 1)
     scroll = min(maximum, max(0, scroll))
@@ -379,17 +395,17 @@ def draw_stories(stories, scroll, feed_name, note="", loading=None):
     rendered, starts = story_document(stories, cols, selected)
     row = 1
     for indent, line, attr in rendered[scroll:scroll + rows - 2]:
-        tui.addstr(row, indent, clip(line, cols - indent), attr)
+        frame[row] = ((" " * indent) + clip(line, cols - indent), attr)
         row += 1
     if not stories:
-        tui.addstr(3, 2, "No stories loaded. Press r to retry.")
+        frame[3] = ("  No stories loaded. Press r to retry.", 0)
     if loading:
-        progress_footer(rows - 1, cols, "Stories", loading[0], loading[1])
+        frame[rows - 1] = (
+            progress_text(cols, "Stories", loading[0], loading[1]), tui.INVERSE)
     else:
-        tui.addstr(rows - 1, 0,
-                   clip("Up/Down line  PgUp/PgDn story  Enter open", cols),
-                   tui.INVERSE)
-    tui.refresh()
+        frame[rows - 1] = (
+            clip("Up/Down line  PgUp/PgDn story  Enter open", cols), tui.INVERSE)
+    present_frame(frame, rows, cols)
     return scroll, selected, starts, maximum
 
 
@@ -429,21 +445,21 @@ def draw_thread(story, root, scroll, loading=None):
     scroll = min(maximum, max(0, scroll))
     selected = item_at_line(starts, scroll)
     rendered, starts = thread_document(nodes, cols, selected)
-    tui.clear()
-    tui.addstr(0, 0, clip(" " + story.get("title", "Discussion") + " ", cols),
-               tui.INVERSE)
+    frame = [("", 0) for unused in range(rows)]
+    frame[0] = (clip(" " + story.get("title", "Discussion") + " ", cols),
+                tui.INVERSE)
     available = rows - 2
     row = 1
     for indent, line, attr in rendered[scroll:scroll + available]:
-        tui.addstr(row, indent, clip(line, cols - indent), attr)
+        frame[row] = ((" " * indent) + clip(line, cols - indent), attr)
         row += 1
     if loading:
-        progress_footer(rows - 1, cols, "Comments", loading[0], loading[1])
+        frame[rows - 1] = (
+            progress_text(cols, "Comments", loading[0], loading[1]), tui.INVERSE)
     else:
-        tui.addstr(rows - 1, 0,
-                   clip("Up/Down line  PgUp/PgDn comment  Enter +/-", cols),
-                   tui.INVERSE)
-    tui.refresh()
+        frame[rows - 1] = (
+            clip("Up/Down line  PgUp/PgDn comment  Enter +/-", cols), tui.INVERSE)
+    present_frame(frame, rows, cols)
     return nodes, scroll, selected, starts, maximum
 
 
