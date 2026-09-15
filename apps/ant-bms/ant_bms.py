@@ -18,8 +18,6 @@ CHARACTERISTIC_UUID = "ffe1"
 MAX_FRAME = 192
 POLL_INTERVAL_MS = 500
 REDRAW_INTERVAL_MS = 1000
-LOW_SOC_PERCENT = 20.0
-
 PAGE_SUMMARY = 0
 PAGE_BMS1 = 1
 PAGE_BMS2 = 2
@@ -319,22 +317,6 @@ def scan_devices():
         return []
 
 
-def foreground_for_soc(soc):
-    if soc <= LOW_SOC_PERCENT:
-        return gfx.rgb(175, 0, 0)
-    if soc <= 40:
-        return gfx.rgb(180, 100, 0)
-    return gfx.rgb(0, 105, 65)
-
-
-def background_for_soc(soc):
-    if soc <= LOW_SOC_PERCENT:
-        return gfx.rgb(255, 219, 219)
-    # Semantic WHITE resolves to the active setterm background.  The native
-    # graphics service also applies the target's inversion before presenting.
-    return gfx.WHITE
-
-
 def aggregate(modules):
     readings = [module["reading"] for module in modules if module["reading"]["valid"]]
     if not readings:
@@ -358,8 +340,8 @@ def text(x, y, value, font=None, color=None):
 
 
 def draw_header(width, page, status, soc):
-    color = foreground_for_soc(soc)
-    gfx.color(color)
+    # Use only semantic colors: setterm supplies their actual palette.
+    gfx.color(gfx.BLACK)
     gfx.fill_rect(0, 0, width, 27)
     text(8, 20, APP_NAME, gfx.FONT_BOLD_16, gfx.WHITE)
     names = ("SUMMARY", "BMS 1", "BMS 2", "TEMPS", "SETUP")
@@ -397,7 +379,7 @@ def draw_summary(width, height, modules, layout, touch_enabled):
         return
 
     margin = max(8, width // 40)
-    primary = foreground_for_soc(soc)
+    primary = gfx.BLACK
     charging = total["current"] < -0.1
     amps = abs(total["current"])
     runtime = (int((total["capacity"] - total["remaining"]) * 3600 / amps)
@@ -405,7 +387,7 @@ def draw_summary(width, height, modules, layout, touch_enabled):
                int(total["remaining"] * 3600 / amps) if amps >= 0.1 else 0)
     runtime_label = "EST. TO FULL" if charging else "EST. TO 0"
     current_label = "CHARGE" if charging else "DRAW"
-    current_color = gfx.rgb(0, 125, 65) if charging else gfx.rgb(185, 35, 25)
+    current_color = gfx.DARK
     power = total["voltage"] * total["current"]
 
     if layout == LAYOUT_POWER:
@@ -464,11 +446,11 @@ def draw_cells(width, height, module, page):
         x = column * cell_width + 5
         y = top + row * cell_height
         normalized = (voltage - reading["min_cell"]) / span
-        color = gfx.rgb(0, 110, 65)
+        color = gfx.DARK
         if voltage == reading["min_cell"] or voltage == reading["max_cell"]:
-            color = gfx.rgb(185, 35, 25)
+            color = gfx.BLACK
         elif normalized < 0.2 or normalized > 0.8:
-            color = gfx.rgb(185, 115, 0)
+            color = gfx.LIGHT
         gfx.color(color)
         gfx.fill_rect(x, y, cell_width - 9, cell_height - 3)
         text(x + 3, y + cell_height - 7, "C%02d %.3f" % (index + 1, voltage), gfx.FONT_SMALL, gfx.WHITE)
@@ -539,9 +521,7 @@ def draw_setup(width, height, devices, selected, modules, message):
 def draw(page, modules, devices, selected, message, layout, touch_enabled):
     width, height = gfx.size()
     total = aggregate(modules)
-    # Unknown SOC is not low SOC.  In particular, Setup runs before a BMS is
-    # connected, so use the semantic background instead of a dithered warning.
-    gfx.clear(background_for_soc(total["soc"]) if total["valid"] else gfx.WHITE)
+    gfx.clear(gfx.WHITE)
     if page == PAGE_SUMMARY:
         draw_summary(width, height, modules, layout, touch_enabled)
     elif page == PAGE_BMS1:
