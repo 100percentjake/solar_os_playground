@@ -242,18 +242,18 @@ def fetch_item(item_id):
     return item if isinstance(item, dict) else {}
 
 
-def fetch_stories(feed_key, feed_name):
+def fetch_stories(feed_key, feed_name, scroll=0):
     ids = request_json(feed_key + ".json")
     if not isinstance(ids, list):
         raise RuntimeError("invalid story list")
     stories = []
     wanted = min(STORY_LIMIT, len(ids))
-    draw_stories(stories, 0, feed_name, loading=(0, wanted))
+    draw_stories(stories, scroll, feed_name, loading=(0, wanted))
     for number, item_id in enumerate(ids[:wanted]):
         item = fetch_item(item_id)
         if item.get("type") in ("story", "job", "poll") and not item.get("dead"):
             stories.append(item)
-        draw_stories(stories, 0, feed_name, loading=(number + 1, wanted))
+        draw_stories(stories, scroll, feed_name, loading=(number + 1, wanted))
     return stories
 
 
@@ -374,8 +374,6 @@ def draw_stories(stories, scroll, feed_name, note="", loading=None):
     tui.addstr(0, 0, clip(title, cols), tui.INVERSE)
     plain, starts = story_document(stories, cols, -1)
     maximum = max(0, len(plain) - 1)
-    if loading and starts:
-        scroll = starts[-1]
     scroll = min(maximum, max(0, scroll))
     selected = item_at_line(starts, scroll)
     rendered, starts = story_document(stories, cols, selected)
@@ -428,12 +426,6 @@ def draw_thread(story, root, scroll, loading=None):
     nodes = visible_nodes(root)
     plain, starts = thread_document(nodes, cols, -1)
     maximum = max(0, len(plain) - 1)
-    if loading and len(loading) > 2:
-        focus = loading[2]
-        for index, node in enumerate(nodes):
-            if node is focus:
-                scroll = starts[index]
-                break
     scroll = min(maximum, max(0, scroll))
     selected = item_at_line(starts, scroll)
     rendered, starts = thread_document(nodes, cols, selected)
@@ -455,20 +447,18 @@ def draw_thread(story, root, scroll, loading=None):
     return nodes, scroll, selected, starts, maximum
 
 
-def show_thread(story):
+def show_thread(story, initial_scroll=0):
     root = {"depth": -1, "kid_ids": story.get("kids", [])[:CHILD_LIMIT],
             "children": [], "loaded": False, "collapsed": False}
     try:
         load_children(root, lambda done, total:
-                      draw_thread(
-                          story, root, 0,
-                          (done, total,
-                           root["children"][-1] if root["children"] else root)))
+                      draw_thread(story, root, initial_scroll,
+                                  (done, total)))
     except Exception as error:
         show_message("Could not load comments", str(error), "Press any key")
         wait_key()
         return
-    scroll = 0
+    scroll = initial_scroll
     dirty = True
     while not solaros.should_exit():
         if dirty:
@@ -504,11 +494,8 @@ def show_thread(story):
                 try:
                     if not node.get("loaded"):
                         load_children(node, lambda done, total:
-                                      draw_thread(
-                                          story, root, scroll,
-                                          (done, total,
-                                           node["children"][-1]
-                                           if node["children"] else node)))
+                                      draw_thread(story, root, scroll,
+                                                  (done, total)))
                     else:
                         node["collapsed"] = not node.get("collapsed")
                 except Exception as error:
@@ -516,7 +503,7 @@ def show_thread(story):
                     wait_key()
                 dirty = True
         elif key == ord("r"):
-            return show_thread(story)
+            return show_thread(story, scroll)
 
 
 def main():
@@ -525,18 +512,22 @@ def main():
     scroll = 0
     note = ""
     refresh = True
+    dirty = True
     while not solaros.should_exit():
         if refresh:
             try:
-                stories = fetch_stories(FEEDS[feed_index][1], FEEDS[feed_index][0])
-                scroll = 0
+                stories = fetch_stories(
+                    FEEDS[feed_index][1], FEEDS[feed_index][0], scroll)
                 note = ""
             except Exception as error:
                 note = "refresh failed: " + str(error)
             refresh = False
-        scroll, selected, starts, maximum = draw_stories(
-            stories, scroll, FEEDS[feed_index][0], note)
-        note = ""
+            dirty = True
+        if dirty:
+            scroll, selected, starts, maximum = draw_stories(
+                stories, scroll, FEEDS[feed_index][0], note)
+            note = ""
+            dirty = False
         key = tui.getch(250)
         if key is None:
             continue
@@ -544,16 +535,22 @@ def main():
             return
         if key == tui.KEY_DOWN and scroll < maximum:
             scroll += 1
+            dirty = True
         elif key == tui.KEY_UP and scroll > 0:
             scroll -= 1
+            dirty = True
         elif key == tui.KEY_PAGE_DOWN and stories:
             scroll = adjacent_item_line(starts, scroll, 1)
+            dirty = True
         elif key == tui.KEY_PAGE_UP:
             scroll = adjacent_item_line(starts, scroll, -1)
+            dirty = True
         elif key in (KEY_ENTER, KEY_RETURN, tui.KEY_RIGHT) and stories:
             show_thread(stories[selected])
+            dirty = True
         elif key == ord("f"):
             feed_index = (feed_index + 1) % len(FEEDS)
+            scroll = 0
             refresh = True
         elif key == ord("r"):
             refresh = True

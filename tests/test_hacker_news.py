@@ -24,6 +24,18 @@ class FakeTui(types.ModuleType):
     INVERSE = 1
     BOLD = 2
 
+    def size(self):
+        return 12, 40
+
+    def clear(self):
+        pass
+
+    def addstr(self, row, col, text, attr=0):
+        pass
+
+    def refresh(self):
+        pass
+
     def getch(self, timeout):
         return self.KEY_ESCAPE
 
@@ -117,6 +129,18 @@ class HackerNewsTest(unittest.TestCase):
         self.assertEqual(self.app.adjacent_item_line(starts, 7, -1), 3)
         self.assertEqual(self.app.adjacent_item_line(starts, 3, -1), 0)
 
+    def test_loading_does_not_auto_follow_new_stories(self):
+        stories = [
+            {"title": "Story " + str(index), "score": 1, "by": "u",
+             "descendants": 0}
+            for index in range(4)
+        ]
+        scroll, selected, starts, maximum = self.app.draw_stories(
+            stories, 3, "Top", loading=(4, 20))
+        self.assertEqual(scroll, 3)
+        self.assertEqual(selected, self.app.item_at_line(starts, 3))
+        self.assertGreater(maximum, scroll)
+
     def test_children_are_published_one_at_a_time(self):
         parent = {"depth": -1, "kid_ids": [1, 2], "children": [],
                   "loaded": False, "collapsed": False}
@@ -142,15 +166,16 @@ class HackerNewsTest(unittest.TestCase):
         self.app.fetch_item = lambda item_id: {
             "id": item_id, "type": "story", "title": "Story " + str(item_id)}
         self.app.draw_stories = lambda stories, scroll, name, **kwargs: frames.append(
-            (len(stories), kwargs.get("loading")))
+            (len(stories), scroll, kwargs.get("loading")))
         try:
-            result = self.app.fetch_stories("topstories", "Top")
+            result = self.app.fetch_stories("topstories", "Top", 7)
         finally:
             self.app.request_json = original_request
             self.app.fetch_item = original_fetch
             self.app.draw_stories = original_draw
         self.assertEqual(len(result), 2)
-        self.assertEqual(frames, [(0, (0, 2)), (1, (1, 2)), (2, (2, 2))])
+        self.assertEqual(frames, [
+            (0, 7, (0, 2)), (1, 7, (1, 2)), (2, 7, (2, 2))])
 
 
 if __name__ == "__main__":

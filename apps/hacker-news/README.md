@@ -31,8 +31,9 @@ The first level of comments is loaded when a discussion opens. Replies are
 downloaded only when their parent is expanded, keeping network traffic and
 memory use reasonable on the ESP32.
 
-Stories and replies appear as soon as each request finishes. A progress bar on
-the bottom row remains visible while a batch is loading.
+Stories and replies append to a stable list as each request finishes. Loading
+never auto-scrolls or resets the viewport. A progress bar on the bottom row
+remains visible while a batch is loading, and an idle view is not redrawn.
 
 Large JSON integers such as Unix timestamps are retained as strings so API
 responses remain compatible with SolarOS's small-int-only MicroPython build.
