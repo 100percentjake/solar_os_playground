@@ -242,17 +242,18 @@ def fetch_item(item_id):
     return item if isinstance(item, dict) else {}
 
 
-def fetch_stories(feed_key):
+def fetch_stories(feed_key, feed_name):
     ids = request_json(feed_key + ".json")
     if not isinstance(ids, list):
         raise RuntimeError("invalid story list")
     stories = []
-    for number, item_id in enumerate(ids[:STORY_LIMIT]):
-        show_message("Hacker News", "Loading story {} of {}".format(
-            number + 1, min(STORY_LIMIT, len(ids))))
+    wanted = min(STORY_LIMIT, len(ids))
+    draw_stories(stories, 0, feed_name, loading=(0, wanted))
+    for number, item_id in enumerate(ids[:wanted]):
         item = fetch_item(item_id)
         if item.get("type") in ("story", "job", "poll") and not item.get("dead"):
             stories.append(item)
+        draw_stories(stories, 0, feed_name, loading=(number + 1, wanted))
     return stories
 
 
@@ -274,21 +275,23 @@ def node_from_item(item, depth):
     }
 
 
-def load_children(parent, progress_title="Discussion"):
+def load_children(parent, progress=None):
     if parent.get("loaded"):
         parent["collapsed"] = False
         return
     children = []
-    ids = parent.get("kid_ids", [])
-    for number, item_id in enumerate(ids):
-        show_message(progress_title, "Loading reply {} of {}".format(
-            number + 1, len(ids)))
-        item = fetch_item(item_id)
-        if item and not item.get("dead"):
-            children.append(node_from_item(item, parent.get("depth", -1) + 1))
     parent["children"] = children
     parent["loaded"] = True
     parent["collapsed"] = False
+    ids = parent.get("kid_ids", [])
+    if progress:
+        progress(0, len(ids))
+    for number, item_id in enumerate(ids):
+        item = fetch_item(item_id)
+        if item and not item.get("dead"):
+            children.append(node_from_item(item, parent.get("depth", -1) + 1))
+        if progress:
+            progress(number + 1, len(ids))
     gc.collect()
 
 
@@ -304,34 +307,92 @@ def visible_nodes(root):
     return result
 
 
-def draw_stories(stories, selected, feed_name, note=""):
+def progress_footer(row, cols, label, done, total):
+    total = max(1, total)
+    done = min(total, max(0, done))
+    count = "{} {}/{} ".format(label, done, total)
+    width = max(1, cols - len(count) - 2)
+    filled = (done * width) // total
+    bar = "[" + ("#" * filled) + ("-" * (width - filled)) + "]"
+    tui.addstr(row, 0, clip(count + bar, cols), tui.INVERSE)
+
+
+def item_at_line(starts, line):
+    if not starts:
+        return 0
+    selected = 0
+    for index, start in enumerate(starts):
+        if start > line:
+            break
+        selected = index
+    return selected
+
+
+def adjacent_item_line(starts, line, direction):
+    if not starts:
+        return 0
+    selected = item_at_line(starts, line)
+    if direction > 0:
+        selected = min(len(starts) - 1, selected + 1)
+    elif line == starts[selected] and selected > 0:
+        selected -= 1
+    return starts[selected]
+
+
+def story_render(story, cols, selected):
+    title_width = max(8, cols - 2)
+    title_lines = wrap(story.get("title", "Untitled"), title_width)
+    rendered = []
+    for number, line in enumerate(title_lines):
+        prefix = "> " if selected and number == 0 else "  "
+        rendered.append((0, prefix + line,
+                         tui.INVERSE if selected else tui.BOLD))
+    meta = "{} pts  {}  {} comments".format(
+        story.get("score", 0), story.get("by", "?"),
+        story.get("descendants", 0))
+    host = domain(story.get("url", "")) or "news.ycombinator.com"
+    rendered.append((2, clip(meta + "  " + host, cols - 2), 0))
+    rendered.append((0, "-" * cols, 0))
+    return rendered
+
+
+def story_document(stories, cols, selected):
+    rendered = []
+    starts = []
+    for index, story in enumerate(stories):
+        starts.append(len(rendered))
+        rendered.extend(story_render(story, cols, index == selected))
+    return rendered, starts
+
+
+def draw_stories(stories, scroll, feed_name, note="", loading=None):
     rows, cols = tui.size()
     tui.clear()
     title = " HN: " + feed_name + " "
     if note:
         title += "| " + note + " "
     tui.addstr(0, 0, clip(title, cols), tui.INVERSE)
-    height = 3
-    visible = max(1, (rows - 2) // height)
-    start = (selected // visible) * visible
+    plain, starts = story_document(stories, cols, -1)
+    maximum = max(0, len(plain) - 1)
+    if loading and starts:
+        scroll = starts[-1]
+    scroll = min(maximum, max(0, scroll))
+    selected = item_at_line(starts, scroll)
+    rendered, starts = story_document(stories, cols, selected)
     row = 1
-    for index in range(start, min(len(stories), start + visible)):
-        story = stories[index]
-        prefix = "> " if index == selected else "  "
-        attr = tui.INVERSE if index == selected else tui.BOLD
-        tui.addstr(row, 0, clip(prefix + story.get("title", "Untitled"), cols), attr)
-        meta = "{} pts  {}  {} comments".format(
-            story.get("score", 0), story.get("by", "?"),
-            story.get("descendants", 0))
-        host = domain(story.get("url", "")) or "news.ycombinator.com"
-        tui.addstr(row + 1, 2, clip(meta + "  " + host, cols - 2))
-        row += height
+    for indent, line, attr in rendered[scroll:scroll + rows - 2]:
+        tui.addstr(row, indent, clip(line, cols - indent), attr)
+        row += 1
     if not stories:
         tui.addstr(3, 2, "No stories loaded. Press r to retry.")
-    tui.addstr(rows - 1, 0,
-               clip("Up/Down Enter comments  f feed  r refresh  q quit", cols),
-               tui.INVERSE)
+    if loading:
+        progress_footer(rows - 1, cols, "Stories", loading[0], loading[1])
+    else:
+        tui.addstr(rows - 1, 0,
+                   clip("Up/Down line  PgUp/PgDn story  Enter open", cols),
+                   tui.INVERSE)
     tui.refresh()
+    return scroll, selected, starts, maximum
 
 
 def comment_lines(node, cols, selected):
@@ -352,84 +413,102 @@ def comment_lines(node, cols, selected):
     return lines
 
 
-def draw_thread(story, root, selected):
+def thread_document(nodes, cols, selected):
+    rendered = []
+    starts = []
+    for index, node in enumerate(nodes):
+        starts.append(len(rendered))
+        rendered.extend(comment_lines(node, cols, index == selected))
+        rendered.append((0, "-" * cols, 0))
+    return rendered, starts
+
+
+def draw_thread(story, root, scroll, loading=None):
     rows, cols = tui.size()
     nodes = visible_nodes(root)
-    selected = min(selected, max(0, len(nodes) - 1))
+    plain, starts = thread_document(nodes, cols, -1)
+    maximum = max(0, len(plain) - 1)
+    if loading and len(loading) > 2:
+        focus = loading[2]
+        for index, node in enumerate(nodes):
+            if node is focus:
+                scroll = starts[index]
+                break
+    scroll = min(maximum, max(0, scroll))
+    selected = item_at_line(starts, scroll)
+    rendered, starts = thread_document(nodes, cols, selected)
     tui.clear()
     tui.addstr(0, 0, clip(" " + story.get("title", "Discussion") + " ", cols),
                tui.INVERSE)
-    available = rows - 3
-    before = max(0, selected - max(1, available // 4))
-    rendered = []
-    selected_row = 0
-    for index in range(before, len(nodes)):
-        block = comment_lines(nodes[index], cols, index == selected)
-        if index == selected:
-            selected_row = len(rendered)
-        rendered.extend(block)
-        rendered.append((0, "-" * cols, 0))
-        if len(rendered) >= available and index >= selected:
-            break
-    if selected_row >= available:
-        rendered = rendered[selected_row:selected_row + available]
+    available = rows - 2
     row = 1
-    for indent, line, attr in rendered[:available]:
+    for indent, line, attr in rendered[scroll:scroll + available]:
         tui.addstr(row, indent, clip(line, cols - indent), attr)
         row += 1
-    count = "{} visible / {} total".format(len(nodes), story.get("descendants", 0))
-    tui.addstr(rows - 2, 1, clip(count, cols - 2))
-    tui.addstr(rows - 1, 0,
-               clip("Up/Down PgUp/PgDn  Enter +/- replies  Esc back", cols),
-               tui.INVERSE)
+    if loading:
+        progress_footer(rows - 1, cols, "Comments", loading[0], loading[1])
+    else:
+        tui.addstr(rows - 1, 0,
+                   clip("Up/Down line  PgUp/PgDn comment  Enter +/-", cols),
+                   tui.INVERSE)
     tui.refresh()
-    return nodes, selected
+    return nodes, scroll, selected, starts, maximum
 
 
 def show_thread(story):
     root = {"depth": -1, "kid_ids": story.get("kids", [])[:CHILD_LIMIT],
             "children": [], "loaded": False, "collapsed": False}
     try:
-        load_children(root, "Discussion")
+        load_children(root, lambda done, total:
+                      draw_thread(
+                          story, root, 0,
+                          (done, total,
+                           root["children"][-1] if root["children"] else root)))
     except Exception as error:
         show_message("Could not load comments", str(error), "Press any key")
         wait_key()
         return
-    selected = 0
+    scroll = 0
     dirty = True
     while not solaros.should_exit():
         if dirty:
-            nodes, selected = draw_thread(story, root, selected)
+            nodes, scroll, selected, starts, maximum = draw_thread(
+                story, root, scroll)
             dirty = False
         key = tui.getch(250)
         if key is None:
             continue
         if key in (tui.KEY_ESCAPE, tui.KEY_LEFT, ord("q")):
             return
-        if key == tui.KEY_DOWN and selected + 1 < len(nodes):
-            selected += 1
+        if key == tui.KEY_DOWN and scroll < maximum:
+            scroll += 1
             dirty = True
-        elif key == tui.KEY_UP and selected > 0:
-            selected -= 1
+        elif key == tui.KEY_UP and scroll > 0:
+            scroll -= 1
             dirty = True
         elif key == tui.KEY_PAGE_DOWN and nodes:
-            selected = min(len(nodes) - 1, selected + max(1, tui.size()[0] // 3))
+            scroll = adjacent_item_line(starts, scroll, 1)
             dirty = True
         elif key == tui.KEY_PAGE_UP:
-            selected = max(0, selected - max(1, tui.size()[0] // 3))
+            scroll = adjacent_item_line(starts, scroll, -1)
             dirty = True
         elif key == tui.KEY_HOME:
-            selected = 0
+            scroll = 0
             dirty = True
         elif key == tui.KEY_END and nodes:
-            selected = len(nodes) - 1
+            scroll = maximum
             dirty = True
         elif key in (KEY_ENTER, KEY_RETURN, tui.KEY_RIGHT, ord(" ")) and nodes:
             node = nodes[selected]
             if node.get("kid_ids"):
                 try:
                     if not node.get("loaded"):
-                        load_children(node)
+                        load_children(node, lambda done, total:
+                                      draw_thread(
+                                          story, root, scroll,
+                                          (done, total,
+                                           node["children"][-1]
+                                           if node["children"] else node)))
                     else:
                         node["collapsed"] = not node.get("collapsed")
                 except Exception as error:
@@ -443,33 +522,34 @@ def show_thread(story):
 def main():
     feed_index = 0
     stories = []
-    selected = 0
+    scroll = 0
     note = ""
     refresh = True
     while not solaros.should_exit():
         if refresh:
             try:
-                stories = fetch_stories(FEEDS[feed_index][1])
-                selected = 0
+                stories = fetch_stories(FEEDS[feed_index][1], FEEDS[feed_index][0])
+                scroll = 0
                 note = ""
             except Exception as error:
                 note = "refresh failed: " + str(error)
             refresh = False
-        draw_stories(stories, selected, FEEDS[feed_index][0], note)
+        scroll, selected, starts, maximum = draw_stories(
+            stories, scroll, FEEDS[feed_index][0], note)
         note = ""
         key = tui.getch(250)
         if key is None:
             continue
         if key in (tui.KEY_ESCAPE, tui.KEY_LEFT, ord("q")):
             return
-        if key == tui.KEY_DOWN and selected + 1 < len(stories):
-            selected += 1
-        elif key == tui.KEY_UP and selected > 0:
-            selected -= 1
+        if key == tui.KEY_DOWN and scroll < maximum:
+            scroll += 1
+        elif key == tui.KEY_UP and scroll > 0:
+            scroll -= 1
         elif key == tui.KEY_PAGE_DOWN and stories:
-            selected = min(len(stories) - 1, selected + max(1, tui.size()[0] // 3))
+            scroll = adjacent_item_line(starts, scroll, 1)
         elif key == tui.KEY_PAGE_UP:
-            selected = max(0, selected - max(1, tui.size()[0] // 3))
+            scroll = adjacent_item_line(starts, scroll, -1)
         elif key in (KEY_ENTER, KEY_RETURN, tui.KEY_RIGHT) and stories:
             show_thread(stories[selected])
         elif key == ord("f"):

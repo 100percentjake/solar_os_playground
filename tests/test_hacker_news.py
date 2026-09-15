@@ -110,6 +110,48 @@ class HackerNewsTest(unittest.TestCase):
         self.assertEqual([node["id"] for node in self.app.visible_nodes(root)],
                          [2, 4])
 
+    def test_line_navigation_jumps_between_item_boundaries(self):
+        starts = [0, 3, 9]
+        self.assertEqual(self.app.item_at_line(starts, 7), 1)
+        self.assertEqual(self.app.adjacent_item_line(starts, 7, 1), 9)
+        self.assertEqual(self.app.adjacent_item_line(starts, 7, -1), 3)
+        self.assertEqual(self.app.adjacent_item_line(starts, 3, -1), 0)
+
+    def test_children_are_published_one_at_a_time(self):
+        parent = {"depth": -1, "kid_ids": [1, 2], "children": [],
+                  "loaded": False, "collapsed": False}
+        original = self.app.fetch_item
+        progress = []
+        self.app.fetch_item = lambda item_id: {
+            "id": item_id, "by": "user", "text": "comment", "kids": []}
+        try:
+            self.app.load_children(
+                parent,
+                lambda done, total: progress.append(
+                    (done, total, len(parent["children"]))))
+        finally:
+            self.app.fetch_item = original
+        self.assertEqual(progress, [(0, 2, 0), (1, 2, 1), (2, 2, 2)])
+
+    def test_stories_are_redrawn_after_each_request(self):
+        original_request = self.app.request_json
+        original_fetch = self.app.fetch_item
+        original_draw = self.app.draw_stories
+        frames = []
+        self.app.request_json = lambda path: [1, 2]
+        self.app.fetch_item = lambda item_id: {
+            "id": item_id, "type": "story", "title": "Story " + str(item_id)}
+        self.app.draw_stories = lambda stories, scroll, name, **kwargs: frames.append(
+            (len(stories), kwargs.get("loading")))
+        try:
+            result = self.app.fetch_stories("topstories", "Top")
+        finally:
+            self.app.request_json = original_request
+            self.app.fetch_item = original_fetch
+            self.app.draw_stories = original_draw
+        self.assertEqual(len(result), 2)
+        self.assertEqual(frames, [(0, (0, 2)), (1, (1, 2)), (2, (2, 2))])
+
 
 if __name__ == "__main__":
     unittest.main()
