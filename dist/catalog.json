@@ -206,6 +206,31 @@
       "version": "1.0.0"
     },
     {
+      "archive": "packages/unit-converter/1.0.0/unit-converter-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "science",
+      "description": "Convert common SI measurements to Imperial units and back.",
+      "entry": "unit_converter.py",
+      "id": "unit-converter",
+      "min_solaros": "4.4.0",
+      "name": "Unit Converter",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "f9d5bceded4b475e64500243b091550c57ec4f1430b04b1b63467641ec87c6d2",
+      "size": 5456,
+      "tags": [
+        "calculator",
+        "conversion",
+        "imperial",
+        "science",
+        "si",
+        "units"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/bluesky/1.3.1/bluesky-1.3.1.sopkg",
       "author": "Victor Khaze",
       "category": "social",
