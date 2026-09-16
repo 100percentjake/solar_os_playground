@@ -265,8 +265,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "b41945da6d4f76b128c3f12f3827fcbcdf2448388679ea7c7520f6d8c7a4ed43",
-      "size": 6248,
+      "sha256": "860d609b065a44d2fc0de57905e3034377a235a1e57dde7f65ad6ddbfc5a3824",
+      "size": 20088,
       "tags": [
         "comments",
         "hacker-news",
@@ -276,7 +276,7 @@
       "version": "1.1.2"
     },
     {
-      "archive": "packages/ant-bms/1.0.11/ant-bms-1.0.11.sopkg",
+      "archive": "packages/ant-bms/1.0.12/ant-bms-1.0.12.sopkg",
       "author": "Jake",
       "category": "utilities",
       "description": "Live monitor for up to two ANT Bluetooth BMS battery packs, with pack, cell, temperature, and energy dashboards.",
@@ -289,8 +289,8 @@
         "gfx"
       ],
       "runtime": "python",
-      "sha256": "1d38bcd9db193c1902fe591cb9d3d6826eeeb604200d7843ed20b2d7472d7617",
-      "size": 26172,
+      "sha256": "65dd7893e543ca3e2c9378d48c0626a40cbc47752c2b38443fb7b5bd209f92a3",
+      "size": 26408,
       "tags": [
         "ant",
         "battery",
@@ -299,7 +299,7 @@
         "monitor",
         "power"
       ],
-      "version": "1.0.11"
+      "version": "1.0.12"
     },
     {
       "archive": "packages/home-assistant/1.0.0/home-assistant-1.0.0.sopkg",

@@ -354,7 +354,7 @@ def draw_header(width, page, status, soc):
     gfx.fill_rect(0, 0, width, 27)
     text(8, 20, APP_NAME, gfx.FONT_BOLD_16, gfx.WHITE)
     names = ("SUMMARY", "BMS 1", "BMS 2", "TEMPS", "SETUP")
-    text(width - 72, 19, names[page], gfx.FONT_SMALL, gfx.WHITE)
+    text(width - 72, 19, names[page % len(names)], gfx.FONT_SMALL, gfx.WHITE)
     text(8, 43, status[:44], gfx.FONT_SMALL, gfx.DARK)
 
 
@@ -379,6 +379,9 @@ def draw_summary(width, height, modules, layout, touch_enabled):
     total = aggregate(modules)
     soc = total["soc"]
     layout_names = ("OVERVIEW", "POWER", "ENERGY")
+    # Input events should keep this in range, but rendering must never let a
+    # malformed value terminate the foreground application.
+    layout %= len(layout_names)
     controls = "Swipe: pages/layouts" if touch_enabled else "Up/Down: layouts"
     draw_header(width, PAGE_SUMMARY,
                 "%s  |  %s  |  %s" % (layout_names[layout], controls, "S setup"), soc)
@@ -587,10 +590,15 @@ def handle_touch(starts, event_list, page, layout, width, height):
     return page, layout, changed
 
 
+def dashboards_unlocked(modules):
+    """Return True after any configured BMS has an established GATT link."""
+    return any(module["connected"] for module in modules)
+
+
 def main():
     modules = [new_module("BMS 1"), new_module("BMS 2")]
     configured = load_config(modules)
-    page = PAGE_SUMMARY if configured else PAGE_SETUP
+    page = PAGE_SETUP
     devices = []
     selected = 0
     message = "Ready"
@@ -604,7 +612,11 @@ def main():
             for module in modules:
                 if module["address"]:
                     connect_module(module)
-            message = "Connecting saved BMS modules"
+            if dashboards_unlocked(modules):
+                page = PAGE_SUMMARY
+                message = "Connected saved BMS modules"
+            else:
+                message = "Saved BMS connection failed; choose or retry"
         else:
             message = "Scanning for BLE devices..."
             draw(page, modules, devices, selected, message, layout, touch_enabled)
@@ -625,13 +637,27 @@ def main():
                 touch_events.append(event)
             page, layout, touch_changed = handle_touch(
                 touch_starts, touch_events, page, layout, width, height)
+            if not dashboards_unlocked(modules):
+                if page != PAGE_SETUP:
+                    page = PAGE_SETUP
+                    message = "Connect a BMS before opening dashboards"
+                    changed = True
+                layout = LAYOUT_OVERVIEW
             if key == gfx.KEY_ESCAPE:
                 break
             if key == gfx.KEY_LEFT:
-                page = (page - 1) % PAGE_COUNT
+                if dashboards_unlocked(modules):
+                    page = (page - 1) % PAGE_COUNT
+                else:
+                    page = PAGE_SETUP
+                    message = "Connect a BMS before opening dashboards"
                 changed = True
             elif key == gfx.KEY_RIGHT:
-                page = (page + 1) % PAGE_COUNT
+                if dashboards_unlocked(modules):
+                    page = (page + 1) % PAGE_COUNT
+                else:
+                    page = PAGE_SETUP
+                    message = "Connect a BMS before opening dashboards"
                 changed = True
             elif key in (ord("s"), ord("S")):
                 page = PAGE_SETUP
@@ -691,10 +717,10 @@ def main():
                 elif key == gfx.KEY_DOWN and devices:
                     selected = min(len(devices) - 1, selected + 1)
                     changed = True
-            elif key == gfx.KEY_UP:
+            elif key == gfx.KEY_UP and dashboards_unlocked(modules):
                 layout = (layout - 1) % LAYOUT_COUNT if page == PAGE_SUMMARY else (page - 1) % PAGE_COUNT
                 changed = True
-            elif key == gfx.KEY_DOWN:
+            elif key == gfx.KEY_DOWN and dashboards_unlocked(modules):
                 layout = (layout + 1) % LAYOUT_COUNT if page == PAGE_SUMMARY else (page + 1) % PAGE_COUNT
                 changed = True
 
