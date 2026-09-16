@@ -327,6 +327,32 @@
       "version": "1.1.0"
     },
     {
+      "archive": "packages/antbms/1.0.0/antbms-1.0.0.sopkg",
+      "author": "Jake",
+      "category": "utilities",
+      "description": "Live monitor for up to two ANT Bluetooth BMS battery packs, with pack, cell, temperature, and energy dashboards.",
+      "entry": "ant_bms.py",
+      "id": "antbms",
+      "min_solaros": "4.11.0",
+      "name": "ANT BMS",
+      "requires": [
+        "ble",
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "075b7ae9960a1f0fb0c941a340e7717c9dc9c188f69dfc644f5dcd903902a426",
+      "size": 26568,
+      "tags": [
+        "ant",
+        "battery",
+        "ble",
+        "bms",
+        "monitor",
+        "power"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/calendar/1.1.0/calendar-1.1.0.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
