@@ -265,8 +265,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "860d609b065a44d2fc0de57905e3034377a235a1e57dde7f65ad6ddbfc5a3824",
-      "size": 20088,
+      "sha256": "b41945da6d4f76b128c3f12f3827fcbcdf2448388679ea7c7520f6d8c7a4ed43",
+      "size": 6248,
       "tags": [
         "comments",
         "hacker-news",
