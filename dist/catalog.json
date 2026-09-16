@@ -1,0 +1,667 @@
+{
+  "apps": [
+    {
+      "archive": "packages/hello-lua/1.0.0/hello-lua-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "examples",
+      "description": "A minimal SolarOS Lua application.",
+      "entry": "main.lua",
+      "id": "hello-lua",
+      "min_solaros": "4.4.0",
+      "name": "Hello Lua",
+      "requires": [],
+      "runtime": "lua",
+      "sha256": "67e895648527527d43ddea551f9c4d371bb01e24347e426055be5c3090746b59",
+      "size": 644,
+      "tags": [
+        "hello",
+        "starter"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/hello-python/1.0.0/hello-python-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "examples",
+      "description": "A minimal SolarOS Python application.",
+      "entry": "main.py",
+      "id": "hello-python",
+      "min_solaros": "4.4.0",
+      "name": "Hello Python",
+      "requires": [],
+      "runtime": "python",
+      "sha256": "f5c0987e22d8902d29d50bb07b16f7710f0f24e0a79a8059fa1426e9459f65bf",
+      "size": 650,
+      "tags": [
+        "hello",
+        "starter"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/mandelbrot-lua/1.0.0/mandelbrot-lua-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "examples",
+      "description": "Renders the Mandelbrot set on the graphic display.",
+      "entry": "mandelbrot.lua",
+      "id": "mandelbrot-lua",
+      "min_solaros": "4.4.0",
+      "name": "Mandelbrot (Lua)",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "lua",
+      "sha256": "9ef3e9e531bef9513d162ddfbb7fba470afd6deeb59e8e6868353da73d593848",
+      "size": 1099,
+      "tags": [
+        "fractal",
+        "graphics",
+        "lua",
+        "mandelbrot"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/mandelbrot-python/1.0.0/mandelbrot-python-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "examples",
+      "description": "Renders the Mandelbrot set on the graphic display.",
+      "entry": "mandelbrot.py",
+      "id": "mandelbrot-python",
+      "min_solaros": "4.4.0",
+      "name": "Mandelbrot (Python)",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "09675c1f8a51081a7305cd83a83db27db51fb513d25fc3145c859cb0d6ed5afc",
+      "size": 1516,
+      "tags": [
+        "fractal",
+        "graphics",
+        "mandelbrot",
+        "python"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/snake-lua/1.0.0/snake-lua-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "games",
+      "description": "Classic Snake with keyboard controls, sound, and scalable graphics.",
+      "entry": "snake.lua",
+      "id": "snake-lua",
+      "min_solaros": "4.4.0",
+      "name": "Snake (Lua)",
+      "requires": [
+        "audio",
+        "gfx"
+      ],
+      "runtime": "lua",
+      "sha256": "1622c244ccc62b07451ddff4a7be12b906a8245668bb73a691c06334542948cd",
+      "size": 2736,
+      "tags": [
+        "arcade",
+        "game",
+        "lua",
+        "snake"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/snake-python/1.0.0/snake-python-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "games",
+      "description": "Classic Snake with keyboard controls, sound, and scalable graphics.",
+      "entry": "snake.py",
+      "id": "snake-python",
+      "min_solaros": "4.4.0",
+      "name": "Snake (Python)",
+      "requires": [
+        "audio",
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "373520d50055228a33483751ddc7c6cc957ce788b2167512428800e8124f9111",
+      "size": 2669,
+      "tags": [
+        "arcade",
+        "game",
+        "python",
+        "snake"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/sokoban/1.1.0/sokoban-1.1.0.sopkg",
+      "author": "SolarOS",
+      "category": "games",
+      "description": "Turn-based box-pushing puzzles designed for reflective displays.",
+      "entry": "sokoban.lua",
+      "id": "sokoban",
+      "min_solaros": "4.6.7",
+      "name": "Sokoban",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "lua",
+      "sha256": "66d99286cd63ba02f3176cf5cb251d5d5c26df2e4cfa7316aed57c6be767ab5d",
+      "size": 4164,
+      "tags": [
+        "boxes",
+        "e-paper",
+        "lua",
+        "puzzle",
+        "sokoban"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/chromatic-tuner/1.0.0/chromatic-tuner-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "music",
+      "description": "Shows the nearest chromatic note and tuning deviation in cents.",
+      "entry": "tuner.py",
+      "id": "chromatic-tuner",
+      "min_solaros": "4.8.9",
+      "name": "Chromatic Tuner",
+      "requires": [
+        "audio_input",
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "2e35b49bc80b2ffd93a051c39422df9d571d9a6d6c758e920f097110538a6a86",
+      "size": 6431,
+      "tags": [
+        "audio",
+        "chromatic",
+        "music",
+        "pitch",
+        "tuner"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/triangle-solver/1.0.0/triangle-solver-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "science",
+      "description": "Solve triangle side lengths and internal angles from any three valid measurements.",
+      "entry": "triangle.lua",
+      "id": "triangle-solver",
+      "min_solaros": "4.4.0",
+      "name": "Triangle Solver",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "lua",
+      "sha256": "953fa092a236c79c22de281dd19e39e07741f7d0e15e56991961d971d8443a5c",
+      "size": 4899,
+      "tags": [
+        "angles",
+        "geometry",
+        "science",
+        "triangle",
+        "trigonometry"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/bluesky/1.3.1/bluesky-1.3.1.sopkg",
+      "author": "Victor Khaze",
+      "category": "social",
+      "description": "Text Bluesky client with timelines, threads, profiles, interactions, posting, and direct messages.",
+      "entry": "bluesky.py",
+      "id": "bluesky",
+      "min_solaros": "4.8.4",
+      "name": "BlueSky",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "3619a9ddfd850752390fae4f9f6334d577e5fe6fd89adb0dead941c7a1979105",
+      "size": 12531,
+      "tags": [
+        "atproto",
+        "bluesky",
+        "messages",
+        "social",
+        "tui"
+      ],
+      "version": "1.3.1"
+    },
+    {
+      "archive": "packages/cyberspace/1.1.0/cyberspace-1.1.0.sopkg",
+      "author": "SolarOS",
+      "category": "social",
+      "description": "Human-operated TUI client for Cyberspace social, journal, mail, and chat workflows.",
+      "entry": "main.py",
+      "id": "cyberspace",
+      "min_solaros": "4.8.9",
+      "name": "Cyberspace",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "9cad790dfedcf32b4c51ff4867895a5ea1ba6ed42240e25889c68d7c2f6d1a65",
+      "size": 37952,
+      "tags": [
+        "chat",
+        "cyberspace",
+        "social",
+        "tui"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/addressbook/1.1.0/addressbook-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Searchable graphical personal address book with phone numbers, email addresses, handles, addresses, websites, and notes.",
+      "entry": "addressbook.py",
+      "id": "addressbook",
+      "min_solaros": "4.8.4",
+      "name": "Address Book",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "862677b35fd6e0c11f541ab58e33512a6391f70649e1de30e0312123f952176c",
+      "size": 12113,
+      "tags": [
+        "address-book",
+        "contacts",
+        "offline",
+        "organization",
+        "people"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/calendar/1.1.0/calendar-1.1.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Offline graphical calendar with recurring events, reminders, ICS subscriptions, search, and import and export.",
+      "entry": "calendar.py",
+      "id": "calendar",
+      "min_solaros": "4.8.4",
+      "name": "Calendar",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "645095c25d0034e43256588d56e275577a76dfeeb82cfee630ba772b23bc6c55",
+      "size": 25526,
+      "tags": [
+        "agenda",
+        "calendar",
+        "ics",
+        "offline",
+        "organization",
+        "subscriptions"
+      ],
+      "version": "1.1.0"
+    },
+    {
+      "archive": "packages/control-center/1.1.3/control-center-1.1.3.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical SolarOS status, job, Wi-Fi, storage, and hardware controls using native system APIs.",
+      "entry": "control_center.py",
+      "id": "control-center",
+      "min_solaros": "4.8.4",
+      "name": "Control Center",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "70f3acdb46dee8f86ddeef051ff2c36183312404fbe862b4380487f0706e6faf",
+      "size": 6712,
+      "tags": [
+        "device",
+        "jobs",
+        "offline",
+        "settings",
+        "status",
+        "system"
+      ],
+      "version": "1.1.3"
+    },
+    {
+      "archive": "packages/copyparty/1.8.0/copyparty-1.8.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Save and browse copyparty servers, download files and folders, and upload small files.",
+      "entry": "copyparty.py",
+      "id": "copyparty",
+      "min_solaros": "4.8.4",
+      "name": "copyparty Client",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "f46a3ab6466056a499c2214fa5c250d6e76ac510ff87d646a33a4fe46b8f954d",
+      "size": 16443,
+      "tags": [
+        "copyparty",
+        "download",
+        "files",
+        "storage",
+        "upload"
+      ],
+      "version": "1.8.0"
+    },
+    {
+      "archive": "packages/flint/1.4.1/flint-1.4.1.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Offline Markdown vault with wiki links, backlinks, daily notes, tags, search, favorites, and full-document editing.",
+      "entry": "flint.py",
+      "id": "flint",
+      "min_solaros": "4.8.4",
+      "name": "Flint",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "0a3e8bbc83de53370f049ff2aeea32050f4e2dbe945468764a61571243d399ec",
+      "size": 24316,
+      "tags": [
+        "daily-notes",
+        "knowledge-base",
+        "markdown",
+        "notes",
+        "offline"
+      ],
+      "version": "1.4.1"
+    },
+    {
+      "archive": "packages/flint-tui/1.4.1/flint-tui-1.4.1.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Text-based offline Markdown vault with wiki links, daily notes, search, and a line-based editor.",
+      "entry": "flint.py",
+      "id": "flint-tui",
+      "min_solaros": "4.8.4",
+      "name": "Flint TUI",
+      "requires": [],
+      "runtime": "python",
+      "sha256": "4f24a20938c4766e4530747dcdbbfa4b2ab0a0a7c2a643d4926442b89ed9ae12",
+      "size": 23386,
+      "tags": [
+        "daily-notes",
+        "knowledge-base",
+        "markdown",
+        "notes",
+        "offline"
+      ],
+      "version": "1.4.1"
+    },
+    {
+      "archive": "packages/home-assistant/1.0.0/home-assistant-1.0.0.sopkg",
+      "author": "LocallyRemote",
+      "category": "utilities",
+      "description": "Control and monitor Home Assistant lights, fans, energy, and temperature sensors from the graphic display.",
+      "entry": "ha.py",
+      "id": "home-assistant",
+      "min_solaros": "4.8.4",
+      "name": "Home Assistant",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "cb6127925d33e54d4d340560770880f94020ffcbc12b3994ae4921027fa19e3b",
+      "size": 5459,
+      "tags": [
+        "automation",
+        "home-assistant",
+        "iot",
+        "lights",
+        "smart-home"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/launcher-builder/1.0.0/launcher-builder-1.0.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical editor for SolarOS launcher grids, apps, commands, labels, and native icons.",
+      "entry": "launcher_builder.py",
+      "id": "launcher-builder",
+      "min_solaros": "4.8.4",
+      "name": "Launcher Builder",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "36d394b76e19ff24a7452ec64bd615d5742ade24db794dd24b5fe4497431ffe0",
+      "size": 12384,
+      "tags": [
+        "configuration",
+        "gfx",
+        "icons",
+        "launcher",
+        "utilities"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/opds/1.0.1/opds-1.0.1.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Browse and search OPDS book catalogs, keep a reading list, and download Reader-compatible books.",
+      "entry": "opds.py",
+      "id": "opds",
+      "min_solaros": "4.8.4",
+      "name": "OPDS Browser",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "f05d6465ec6b05b7f67d9eaed92684dc9bc40c18c698e27d76030c121da65ecd",
+      "size": 11368,
+      "tags": [
+        "books",
+        "ebooks",
+        "kavita",
+        "library",
+        "opds"
+      ],
+      "version": "1.0.1"
+    },
+    {
+      "archive": "packages/qr-share/1.0.0/qr-share-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "utilities",
+      "description": "Show an SSH public key, text, or a small file as a scannable QR code.",
+      "entry": "qrshare.py",
+      "id": "qr-share",
+      "min_solaros": "4.6.8",
+      "name": "QR Share",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "4b53bbd186194a8c44aa4abcdec41c1785d69154221acbaf7508621ee4b1da05",
+      "size": 5718,
+      "tags": [
+        "e-paper",
+        "qr",
+        "share",
+        "ssh",
+        "utility"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/rss/1.1.1/rss-1.1.1.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Offline-first RSS and Atom reader with aggregate, per-feed, and cached article views.",
+      "entry": "rss.py",
+      "id": "rss",
+      "min_solaros": "4.8.4",
+      "name": "RSS Reader",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "04cc308b45274614bfb5fb0213d1a15ab260f648d9e915c358417cbc24527105",
+      "size": 10536,
+      "tags": [
+        "atom",
+        "feeds",
+        "news",
+        "offline",
+        "rss"
+      ],
+      "version": "1.1.1"
+    },
+    {
+      "archive": "packages/today/1.2.0/today-1.2.0.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "A friendly offline daily overview of tasks, calendar events, recent notes, and unread feeds.",
+      "entry": "today.py",
+      "id": "today",
+      "min_solaros": "4.8.4",
+      "name": "Today Dashboard",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "6bab78ae102e10e2a5aa52ed4e39f3fadc3ab80030e685d050f2f1c21982af09",
+      "size": 8390,
+      "tags": [
+        "calendar",
+        "dashboard",
+        "offline",
+        "organization",
+        "rss",
+        "tasks"
+      ],
+      "version": "1.2.0"
+    },
+    {
+      "archive": "packages/todo/1.1.2/todo-1.1.2.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Graphical task lists with projects, recurring tasks, completion history, and exports.",
+      "entry": "todo.py",
+      "id": "todo",
+      "min_solaros": "4.8.4",
+      "name": "Todo List",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "b3228c88e837116996967255421306bbc0dcfd3bcf197c7471002a6e1093ba2b",
+      "size": 14498,
+      "tags": [
+        "offline",
+        "organization",
+        "projects",
+        "tasks",
+        "todo"
+      ],
+      "version": "1.1.2"
+    },
+    {
+      "archive": "packages/weather/1.0.0/weather-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "utilities",
+      "description": "Shows local conditions and Open-Meteo temperature and precipitation forecasts.",
+      "entry": "weather.py",
+      "id": "weather",
+      "min_solaros": "4.8.4",
+      "name": "Weather",
+      "requires": [
+        "gfx",
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "8ed50abefad6c44f53938ec52a021d28281bc1e4155ac348d4ff9d15280228a5",
+      "size": 7998,
+      "tags": [
+        "forecast",
+        "open-meteo",
+        "sensors",
+        "weather"
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "archive": "packages/wikipedia/1.0.2/wikipedia-1.0.2.sopkg",
+      "author": "Victor Khaze",
+      "category": "utilities",
+      "description": "Fast text Wikipedia reader with search, link hopping, bookmarks, cache, and an offline library.",
+      "entry": "wikipedia.py",
+      "id": "wikipedia",
+      "min_solaros": "4.8.4",
+      "name": "Wikipedia Reader",
+      "requires": [
+        "wifi"
+      ],
+      "runtime": "python",
+      "sha256": "c6ecb217318d360464d7a300d5d9f5a0f77856b9541c1f90a38582cecda20e40",
+      "size": 12369,
+      "tags": [
+        "encyclopedia",
+        "offline",
+        "reader",
+        "reference",
+        "wikipedia"
+      ],
+      "version": "1.0.2"
+    }
+  ],
+  "categories": [
+    {
+      "id": "games",
+      "order": 10,
+      "title": "Games"
+    },
+    {
+      "id": "music",
+      "order": 15,
+      "title": "Music"
+    },
+    {
+      "id": "social",
+      "order": 18,
+      "title": "Social"
+    },
+    {
+      "id": "utilities",
+      "order": 20,
+      "title": "Utilities"
+    },
+    {
+      "id": "science",
+      "order": 25,
+      "title": "Science"
+    },
+    {
+      "id": "hacking",
+      "order": 30,
+      "title": "Hacking"
+    },
+    {
+      "id": "development",
+      "order": 40,
+      "title": "Development"
+    },
+    {
+      "id": "examples",
+      "order": 50,
+      "title": "Examples"
+    }
+  ],
+  "repository": {
+    "id": "solar-os-playground",
+    "name": "SolarOS Playground"
+  },
+  "schema": "solaros.playground.catalog",
+  "schema_version": 1
+}
