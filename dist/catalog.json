@@ -545,7 +545,7 @@
       "version": "1.0.0"
     },
     {
-      "archive": "packages/rss/1.1.1/rss-1.1.1.sopkg",
+      "archive": "packages/rss/1.1.2/rss-1.1.2.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
       "description": "Offline-first RSS and Atom reader with aggregate, per-feed, and cached article views.",
@@ -557,8 +557,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "04cc308b45274614bfb5fb0213d1a15ab260f648d9e915c358417cbc24527105",
-      "size": 10536,
+      "sha256": "2807361098194ed4102f85592afed53b279c6719d4ac0042c208977652bc5400",
+      "size": 10717,
       "tags": [
         "atom",
         "feeds",
@@ -566,7 +566,7 @@
         "offline",
         "rss"
       ],
-      "version": "1.1.1"
+      "version": "1.1.2"
     },
     {
       "archive": "packages/today/1.2.0/today-1.2.0.sopkg",
@@ -642,7 +642,7 @@
       "version": "1.0.0"
     },
     {
-      "archive": "packages/wikipedia/1.0.2/wikipedia-1.0.2.sopkg",
+      "archive": "packages/wikipedia/1.0.3/wikipedia-1.0.3.sopkg",
       "author": "Victor Khaze",
       "category": "utilities",
       "description": "Fast text Wikipedia reader with search, link hopping, bookmarks, cache, and an offline library.",
@@ -654,8 +654,8 @@
         "wifi"
       ],
       "runtime": "python",
-      "sha256": "c6ecb217318d360464d7a300d5d9f5a0f77856b9541c1f90a38582cecda20e40",
-      "size": 12369,
+      "sha256": "f22430dbdb250b7845da33d28b42f92950062301e7d8304f6efe3a817fe33c6c",
+      "size": 12636,
       "tags": [
         "encyclopedia",
         "offline",
@@ -663,7 +663,7 @@
         "reference",
         "wikipedia"
       ],
-      "version": "1.0.2"
+      "version": "1.0.3"
     }
   ],
   "categories": [
