@@ -1,0 +1,13 @@
+{
+  "id": "flint-tui",
+  "name": "Flint TUI",
+  "version": "1.4.1",
+  "runtime": "python",
+  "entry": "flint.py",
+  "category": "utilities",
+  "description": "Text-based offline Markdown vault with wiki links, daily notes, search, and a line-based editor.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["daily-notes", "knowledge-base", "markdown", "notes", "offline"],
+  "requires": []
+}

@@ -1,0 +1,13 @@
+{
+  "id": "today",
+  "name": "Today Dashboard",
+  "version": "1.2.0",
+  "runtime": "python",
+  "entry": "today.py",
+  "category": "utilities",
+  "description": "A friendly offline daily overview of tasks, calendar events, recent notes, and unread feeds.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["calendar", "dashboard", "offline", "organization", "rss", "tasks"],
+  "requires": ["gfx"]
+}
