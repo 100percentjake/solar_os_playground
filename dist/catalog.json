@@ -182,6 +182,31 @@
       "version": "1.0.0"
     },
     {
+      "archive": "packages/formulas/1.0.0/formulas-1.0.0.sopkg",
+      "author": "SolarOS",
+      "category": "science",
+      "description": "Browse and calculate practical scientific formulas in coherent SI units.",
+      "entry": "formulas.py",
+      "id": "formulas",
+      "min_solaros": "4.4.0",
+      "name": "Formulas",
+      "requires": [
+        "gfx"
+      ],
+      "runtime": "python",
+      "sha256": "0bc5f1b61587e82fda2b6b117010c0ba2236acbc6417bde5189112286aa93c7f",
+      "size": 15085,
+      "tags": [
+        "calculator",
+        "equations",
+        "formulas",
+        "reference",
+        "science",
+        "si"
+      ],
+      "version": "1.0.0"
+    },
+    {
       "archive": "packages/triangle-solver/1.0.0/triangle-solver-1.0.0.sopkg",
       "author": "SolarOS",
       "category": "science",
