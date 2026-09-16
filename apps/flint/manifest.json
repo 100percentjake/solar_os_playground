@@ -1,0 +1,13 @@
+{
+  "id": "flint",
+  "name": "Flint",
+  "version": "1.4.1",
+  "runtime": "python",
+  "entry": "flint.py",
+  "category": "utilities",
+  "description": "Offline Markdown vault with wiki links, backlinks, daily notes, tags, search, favorites, and full-document editing.",
+  "author": "Victor Khaze",
+  "min_solaros": "4.8.4",
+  "tags": ["daily-notes", "knowledge-base", "markdown", "notes", "offline"],
+  "requires": ["gfx"]
+}
